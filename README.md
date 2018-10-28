@@ -1,24 +1,43 @@
-# README
+# Rails Tongoute API
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Install
 
-Things you may want to cover:
+### Clone repository
 
-* Ruby version
+```
+git clone https://github.com/fon-Luchs/Tongoute-api.git
+```
 
-* System dependencies
+### Install gems
 
-* Configuration
+```
+gem install bundler
+```
 
-* Database creation
+```
+bundle install
+```
 
-* Database initialization
+### Create databases
 
-* How to run the test suite
+```
+rake db:create
+```
 
-* Services (job queues, cache servers, search engines, etc.)
+### Run migrations
 
-* Deployment instructions
+```
+rake db:migrate
+```
 
-* ...
+### Run specs
+
+```
+rake
+```
+
+### Run server
+
+```
+rails s
+```
