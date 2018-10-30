@@ -4,7 +4,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 ruby '2.5.1'
 
 gem 'rails', '~> 5.2'
-gem 'sqlite3'
+gem 'pg'
 gem 'puma'
 gem 'bcrypt'
 gem 'uglifier'
@@ -12,6 +12,7 @@ gem 'bootsnap', require: false
 gem 'draper'
 gem 'kaminari'
 gem 'email_validator'
+gem 'rails_12factor', group: :production
 
 group :development, :test do
   gem 'simplecov'

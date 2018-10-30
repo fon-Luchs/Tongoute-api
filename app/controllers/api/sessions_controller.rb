@@ -8,6 +8,7 @@ class Api::SessionsController < BaseController
   def destroy
     @session = current_user
     @session.auth_token.destroy
+    head 204
   end
 
   private

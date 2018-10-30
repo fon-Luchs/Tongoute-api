@@ -36,23 +36,40 @@ RSpec.describe Api::SessionsController, type: :controller do
   end
 
   describe '#destroy.json' do
-    let(:user) { stub_model User }
+    let(:user) { create(:user, :with_auth_token) }
+
+    let(:value) { user.auth_token.value }
+
+    let(:headers) do
+      {
+        'Authorization' => "Token token=#{value}",
+        'Content-type' => 'application/json',
+        'Accept' => 'application/json'
+      }
+    end
 
     before { sign_in user }
 
+    before { merge_header }
+
     before do
-      expect(subject).to receive_message_chain(:resource, :destroy)
-        .with(no_args).with(no_args)
+      expect(user).to receive(:auth_token) do
+        double.tap { |a| expect(a).to receive(:destroy) }
+      end
     end
 
     before { delete :destroy, format: :json }
 
-    it { expect(response.status).to eq(200) }
+    it { expect(response).to have_http_status(204) }
   end
 
   describe 'routes test' do
     it { should route(:post, 'api/session').to(action: :create) }
 
     it { should route(:delete, 'api/session').to(action: :destroy) }
+  end
+
+  def merge_header
+    request.headers.merge!(headers)
   end
 end
