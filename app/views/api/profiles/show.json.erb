@@ -1,7 +1,7 @@
 <%= sanitize resource.decorate(context: 
 {
-  id: :id, name: :name, groups: :groups,
+  id: :id, name: :name, information: :information, wall: :wall, groups: :groups,
   friends: :friends, videos: :videos, photos: :photos,
-  audios: :audios, information: :information
+  audios: :audios, notes: :notes, bookmark: :bookmark
 }
 ).to_json %>  

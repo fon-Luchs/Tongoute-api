@@ -10,37 +10,39 @@ RSpec.describe 'UpdateProfile', type: :request do
   let(:params) { { user: { first_name: "Ben", last_name: "Gun", email: "new@email.com" } } }
 
   let(:relations) do
-    user.info.relations.map do |relation|
-      [{ "id" => relation.user_id, "name" => relation.user_name, "relation" => relation.relation }]
+    user.relations.map do |relation|
+      { "id" => relation.user_id, "name" => relation.user_name, "relation" => relation.relation }
     end
   end
 
   let(:info) do
-    user.info.map do |info|
-      {
-        "email" => user.email,
-        "number" => user.number,
-        "bday" => user.date,
-        "address" => user.adres,
-        "relations" => relations,
-        "about self" => user.about
-      }
-    end
+    {
+      "email" => user.email,
+      "number" => user.number,
+      "bday" => user.date,
+      "relations" => relations,
+      "location" => "#{user.country}, #{user.locate}",
+      "address" => user.adres,
+      "about self" => user.about
+    }
   end
 
   let(:profile_response) do
     {
       "id" => user.id,
       "name" => "#{user.first_name} #{user.last_name}",
+      "information" => info,
+      "wall" => user.wall,
       "groups" => user.groups.count,
-      "friends" => user.friends.count,
-      "video" => user.videos.count,
-      "photos" => user.photos.count,
-      "audios" => user.audios.count,
-      "information" => info
+      "friends" => user.friends,
+      "video" => user.videos,
+      "photos" => user.photos,
+      "audios" => user.audios,
+      "notes" => user.notes,
+      "bookmarks" => user.bookmarks
     }
   end
-  
+
   context do
     before { put '/api/profile', params: params.to_json, headers: headers }
 

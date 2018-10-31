@@ -27,7 +27,11 @@ FactoryBot.define do
     trait :with_information do
       number { FFaker::PhoneNumberDE.home_work_phone_number }
 
-      address { FFaker::AddressUK.city }
+      address { FFaker::AddressPL.street }
+
+      country { 'Poland' }
+
+      locate { FFaker::AddressPL.city }
 
       about { FFaker::Skill.specialties }
 

@@ -40,4 +40,16 @@ RSpec.describe User, type: :model do
   it { should validate_presence_of(:first_name) }
 
   it { should validate_presence_of(:last_name) }
+
+  it { should validate_length_of(:about).is_at_least(5) }
+
+  it { should allow_value('+3804388297').for(:number) }
+
+  it { should validate_length_of(:address).is_at_least(5).is_at_most(35) }
+
+  it { should validate_length_of(:country).is_at_least(2).is_at_most(35) }
+
+  it { should validate_length_of(:locate).is_at_least(2).is_at_most(35) }
+
+  it { should allow_value('14-07-1983').for(:date) }
 end

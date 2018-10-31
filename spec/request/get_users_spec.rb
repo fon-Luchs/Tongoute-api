@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'GetProfile', type: :request do
+RSpec.describe 'GetUser', type: :request do
   let(:user) { create(:user, :with_auth_token, :with_information)}
 
   let(:value) { user.auth_token.value }
@@ -31,27 +31,24 @@ RSpec.describe 'GetProfile', type: :request do
     }
   end
 
-  let(:profile_response) do
+  let(:user_response) do
     {
       "id" => user.id,
       "name" => "#{user.first_name} #{user.last_name}",
       "information" => info,
       "wall" => user.wall,
-      "groups" => user.groups.count,
-      "friends" => user.friends,
+      "groups" => groups,
+      "friends" => user.friends.count,
       "video" => user.videos,
       "photos" => user.photos,
-      "audios" => user.audios,
-      "notes" => user.notes,
-      "bookmarks" => user.bookmarks
+      "audios" => user.audios
     }
   end
 
-
   context do
-    before { get '/api/profile', params: {} , headers: headers }
+    before { get '/api/users/1', params: {} , headers: headers }
 
-    it('returns profile') { expect(JSON.parse(response.body)).to eq profile_response }
+    it('returns profile') { expect(JSON.parse(response.body)).to eq user_response }
 
     it('returns HTTP Status Code 200') { expect(response).to have_http_status 200 }
   end
@@ -59,7 +56,7 @@ RSpec.describe 'GetProfile', type: :request do
   context 'Unauthorized' do
     let(:value) { SecureRandom.uuid }
 
-    before { get '/api//profile', params: {} , headers: headers }
+    before { get '/api/users/7', params: {} , headers: headers }
 
     it('returns HTTP Status Code 401') { expect(response).to have_http_status :unauthorized }
   end

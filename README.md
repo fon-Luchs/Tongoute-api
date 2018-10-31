@@ -75,6 +75,7 @@ curl -H 'Accept: application/json' \
      -d 'user[first_name]=Jarry&user[last_name]=Smith' \
      -d 'user[date]=24.12.1997&user[number]=1234567890' \
      -d 'user[address]=Apple str. 13&user[about]=Some informations' \
+     -d 'user[country]=USA&user[locate]=New York' \
      -X PUT localhost:3000/api/profile
 
 
@@ -90,4 +91,20 @@ curl -H 'Accept: application/json' \
 curl -H 'Accept: application/json' \
      -H 'Authorization: Token token="XXXX-YYYY-ZZZZ"' \
      -X DELETE localhost:3000/api/profile
+```
+
+### User Show
+
+```
+curl -H 'Accept: application/json' \
+     -H 'Authorization: Token token="XXXX-YYYY-ZZZZ"' \
+      localhost:3000/api/users/:id
+```
+
+### User Index
+
+```
+curl -H 'Accept: application/json' \
+     -H 'Authorization: Token token="XXXX-YYYY-ZZZZ"' \
+      localhost:3000/api/users/
 ```
