@@ -1,6 +1,8 @@
 class UserDecorator < Draper::Decorator
   delegate_all
 
+  decorates_associations :notes
+
   def as_json(*args)
     params.select { |key, value| @context.key? key }
   end
@@ -116,14 +118,6 @@ class UserDecorator < Draper::Decorator
         name: 'дорожка13.mp3'
       }
     ]
-  end
-
-  def notes
-    {
-      id: 3,
-      title: 'Hello in my wall',
-      body: nil
-    }
   end
 
   def bookmark

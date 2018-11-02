@@ -37,5 +37,9 @@ FactoryBot.define do
 
       date { FFaker::Time.date }
     end
+
+    # trait :with_relation_ship do
+    #   create :relationship, user: user, name: 'Best Friend'
+    # end
   end
 end

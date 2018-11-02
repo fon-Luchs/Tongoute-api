@@ -108,3 +108,45 @@ curl -H 'Accept: application/json' \
      -H 'Authorization: Token token="XXXX-YYYY-ZZZZ"' \
       localhost:3000/api/users/
 ```
+
+### Note Create
+
+```
+curl -H 'Accept: application/json' \
+     -H 'Authorization: Token token="XXXX-YYYY-ZZZZ"' \
+     -d 'note[title]=My first title&note[body]=My first title' \
+      localhost:3000/api/profile/notes
+```
+
+### Note Update
+
+```
+curl -H 'Accept: application/json' \
+     -H 'Authorization: Token token="XXXX-YYYY-ZZZZ"' \
+     -d 'note[title]=My first title&note[body]=My first title' \
+      localhost:3000/api/profile/notes
+```
+
+### Note Show
+
+```
+curl -H 'Accept: application/json' \
+     -H 'Authorization: Token token="XXXX-YYYY-ZZZZ"' \
+      localhost:3000/api/profile/notes/:id
+```
+
+### Note Index
+
+```
+curl -H 'Accept: application/json' \
+     -H 'Authorization: Token token="XXXX-YYYY-ZZZZ"' \
+      localhost:3000/api/profile/notes/
+```
+
+### Note Delete
+
+```
+curl -H 'Accept: application/json' \
+     -H 'Authorization: Token token="XXXX-YYYY-ZZZZ"' \
+     -X DELETE localhost:3000/api/profile/notes/:id
+```

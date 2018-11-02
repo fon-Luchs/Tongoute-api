@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe 'GetUser', type: :request do
-  let(:user) { create(:user, :with_auth_token, :with_information)}
+  let!(:user) { create(:user, :with_auth_token, :with_information, id: 1)}
 
   let(:value) { user.auth_token.value }
 

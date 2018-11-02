@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe 'GetProfile', type: :request do
+RSpec.describe 'CreateRelationship', type: :request do
   let(:user) { create(:user, :with_auth_token, :with_information)}
 
   let(:value) { user.auth_token.value }
@@ -16,12 +16,6 @@ RSpec.describe 'GetProfile', type: :request do
   let(:relations) do
     user.relations.map do |relation|
       { "id" => relation.user_id, "name" => relation.user_name, "relation" => relation.relation }
-    end
-  end
-
-  let(:notes) do
-    user.notes.map do |note|
-      { "id" => note.id, "title" => note.title, "body" => note.body }
     end
   end
 
@@ -48,14 +42,13 @@ RSpec.describe 'GetProfile', type: :request do
       "video" => user.videos,
       "photos" => user.photos,
       "audios" => user.audios,
-      "notes" => notes,
+      "notes" => user.notes,
       "bookmarks" => user.bookmarks
     }
   end
 
-
   context do
-    before { get '/api/profile', params: {} , headers: headers }
+    before { get '/api/profile/relations', params: {} , headers: headers }
 
     it('returns profile') { expect(JSON.parse(response.body)).to eq profile_response }
 
@@ -65,7 +58,7 @@ RSpec.describe 'GetProfile', type: :request do
   context 'Unauthorized' do
     let(:value) { SecureRandom.uuid }
 
-    before { get '/api/profile', params: {} , headers: headers }
+    before { get '/api/profile/relations', params: {} , headers: headers }
 
     it('returns HTTP Status Code 401') { expect(response).to have_http_status :unauthorized }
   end
