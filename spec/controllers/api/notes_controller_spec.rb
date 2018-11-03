@@ -91,7 +91,7 @@ RSpec.describe Api::NotesController, type: :controller do
     end
   end
 
-  describe '#delete.json' do
+  describe '#destroy.json' do
     before { merge_header }
 
     before { delete :destroy, params: { id: note.id.to_s }, format: :json }

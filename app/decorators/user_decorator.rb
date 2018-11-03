@@ -53,12 +53,8 @@ class UserDecorator < Draper::Decorator
   end
 
   def wall
-    {
-      id: 3,
-      title: 'Hello in my wall',
-      body: nil,
-      likes: 42
-    }
+    posts = Post.all.where(destination_id: id)
+    posts.decorate.as_json
   end
 
   def groups

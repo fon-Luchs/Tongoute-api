@@ -5,6 +5,8 @@ class User < ApplicationRecord
 
   has_many :notes, dependent: :destroy
 
+  has_many :posts
+
   validates :email, presence: true, uniqueness: { case_sensitive: false }
 
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }

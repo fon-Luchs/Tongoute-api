@@ -124,7 +124,7 @@ curl -H 'Accept: application/json' \
 curl -H 'Accept: application/json' \
      -H 'Authorization: Token token="XXXX-YYYY-ZZZZ"' \
      -d 'note[title]=My first title&note[body]=My first title' \
-      localhost:3000/api/profile/notes
+      localhost:3000/api/profile/notes/:id
 ```
 
 ### Note Show
@@ -149,4 +149,68 @@ curl -H 'Accept: application/json' \
 curl -H 'Accept: application/json' \
      -H 'Authorization: Token token="XXXX-YYYY-ZZZZ"' \
      -X DELETE localhost:3000/api/profile/notes/:id
+```
+
+### Wall Create Post
+
+```
+curl -H 'Accept: application/json' \
+     -H 'Authorization: Token token="XXXX-YYYY-ZZZZ"' \
+     -d 'post[title]=My first title&post[body]=My first title' \
+      localhost:3000/api/profile/walls
+
+curl -H 'Accept: application/json' \
+     -H 'Authorization: Token token="XXXX-YYYY-ZZZZ"' \
+     -d 'post[title]=My first title&post[body]=My first title' \
+      localhost:3000/api/user/:user_id/walls
+```
+
+### Wall Show Post
+
+```
+curl -H 'Accept: application/json' \
+     -H 'Authorization: Token token="XXXX-YYYY-ZZZZ"' \
+      localhost:3000/api/profile/walls/:id
+
+curl -H 'Accept: application/json' \
+     -H 'Authorization: Token token="XXXX-YYYY-ZZZZ"' \
+      localhost:3000/api/user/:user_id/walls/:id
+```
+
+### Wall Index
+
+```
+curl -H 'Accept: application/json' \
+     -H 'Authorization: Token token="XXXX-YYYY-ZZZZ"' \
+      localhost:3000/api/profile/walls/
+
+curl -H 'Accept: application/json' \
+     -H 'Authorization: Token token="XXXX-YYYY-ZZZZ"' \
+      localhost:3000/api/user/:user_id/walls/
+```
+
+### Wall Update Post
+
+```
+curl -H 'Accept: application/json' \
+     -H 'Authorization: Token token="XXXX-YYYY-ZZZZ"' \
+     -d 'post[title]=My first title&post[body]=My first title' \
+      localhost:3000/api/profile/walls/:id
+
+curl -H 'Accept: application/json' \
+     -H 'Authorization: Token token="XXXX-YYYY-ZZZZ"' \
+     -d 'post[title]=My first title&post[body]=My first title' \
+      localhost:3000/api/user/:user_id/walls/:id
+```
+
+### Wall Delete Post
+
+```
+curl -H 'Accept: application/json' \
+     -H 'Authorization: Token token="XXXX-YYYY-ZZZZ"' \
+     -X DELETE localhost:3000/api/profile/walls/:id
+
+curl -H 'Accept: application/json' \
+     -H 'Authorization: Token token="XXXX-YYYY-ZZZZ"' \
+     -X DELETElocalhost:3000/api/user/:user_id/walls/:id
 ```
