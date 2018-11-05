@@ -212,5 +212,5 @@ curl -H 'Accept: application/json' \
 
 curl -H 'Accept: application/json' \
      -H 'Authorization: Token token="XXXX-YYYY-ZZZZ"' \
-     -X DELETElocalhost:3000/api/user/:user_id/walls/:id
+     -X DELETE localhost:3000/api/user/:user_id/walls/:id
 ```
