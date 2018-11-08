@@ -6,10 +6,16 @@ Rails.application.routes.draw do
       resources :notes
 
       resources :walls
+
+      resources :subscribers, only: [:show, :index]
     end
 
     resources :users, only: [:show, :index] do
       resources :walls
+
+      resources :subscribers, only: :index
+
+      post 'request', to: 'subscribers#create' 
     end
   end
 end

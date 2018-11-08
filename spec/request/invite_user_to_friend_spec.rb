@@ -3,6 +3,8 @@ require 'rails_helper'
 RSpec.describe 'InviteUserToFriend', type: :request do
   let(:user) { create(:user, :with_auth_token)}
 
+  let(:sub_user) { create(:user, id: 1) }
+
   let(:value) { user.auth_token.value }
 
   let(:headers) { { 'Authorization' => "Token token=#{value}", 'Content-type' => 'application/json', 'Accept' => 'application/json' } }
@@ -60,7 +62,7 @@ RSpec.describe 'InviteUserToFriend', type: :request do
     }
   end
 
-  before { create(:subbscriber, resource_params.merge(user: user)) }
+  before { create(:subscriber, resource_params.merge(user: user, subscriber_id: sub_user.id)) }
 
   context do
     before { post '/api/users/1/request', params: params.to_json, headers: headers }
@@ -76,11 +78,5 @@ RSpec.describe 'InviteUserToFriend', type: :request do
     before { post '/api/users/1/request', params: params.to_json, headers: headers }
 
     it('returns HTTP Status Code 401') { expect(response).to have_http_status :unauthorized }
-  end
-
-  context 'invalid params' do
-    before { post '/api/users/1/request', params: {}, headers: headers }
-
-    it('returns HTTP Status Code 422') { expect(response).to have_http_status 422 }
   end
 end

@@ -7,6 +7,12 @@ class User < ApplicationRecord
 
   has_many :posts
 
+  has_many :subscribers
+
+  has_many :friends
+
+  has_many :block_users
+
   validates :email, presence: true, uniqueness: { case_sensitive: false }
 
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }

@@ -2,6 +2,7 @@ class UserDecorator < Draper::Decorator
   delegate_all
 
   decorates_associations :notes
+  decorates_associations :subscribers
 
   def as_json(*args)
     params.select { |key, value| @context.key? key }
@@ -16,6 +17,7 @@ class UserDecorator < Draper::Decorator
       wall: wall,
       groups: groups,
       friends: friends,
+      subscribers: subscribers,
       videos: videos,
       photos: photos,
       audios: audios,
