@@ -1,9 +1,13 @@
 require 'rails_helper'
 
 RSpec.describe 'GetUserFriendResource', type: :request do
-  let(:user) { create(:user, :with_auth_token, id: 1) }
+  let(:user) { create(:user, :with_auth_token) }
 
-  let!(:friend) { create(:friend, user: user, id: 1) }
+  let(:sub_user)      { create(:user, first_name: 'Jeffrey', last_name: 'Lebowski') }
+
+  let(:subscriber)    { create(:subscriber, user: user, subscriber_id: sub_user.id ) }
+
+  let!(:friend) { create(:friend, user: user, friend_id: subscriber.subscriber_id, id: 1) }
 
   let!(:user_friend) { friend.user }
 

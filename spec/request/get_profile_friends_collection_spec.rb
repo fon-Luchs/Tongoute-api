@@ -3,9 +3,13 @@ require 'rails_helper'
 RSpec.describe 'GetProfileFriendCollection', type: :request do
   let(:user) { create(:user, :with_auth_token) }
 
-  let!(:friend) { create(:friend, user: user, id: 1) }
+  let(:sub_user)      { create(:user, first_name: 'Jeffrey', last_name: 'Lebowski') }
 
-  let!(:user_friend) { friend.user }
+  let(:subscriber)    { create(:subscriber, user: user, subscriber_id: sub_user.id ) }
+
+  let!(:friend) { create(:friend, user: user, friend_id: subscriber.subscriber_id, id: 1) }
+
+  let!(:user_friends) { user.friends }
 
   let(:value) { user.auth_token.value }
 
@@ -42,7 +46,7 @@ RSpec.describe 'GetProfileFriendCollection', type: :request do
   end
 
   let(:resource_response) do
-    user_friend.map do |user|
+    user_friends.all.map do |user|
     {
       "id" => user.id,
       "name" => "#{user.first_name} #{user.last_name}",
@@ -54,16 +58,12 @@ RSpec.describe 'GetProfileFriendCollection', type: :request do
       "video" => user.videos,
       "photos" => user.photos,
       "audios" => user.audios,
-      "notes" => notes,
-      "bookmarks" => user.bookmarks
     }
     end
   end
 
-  before { create(:friend, resource_params.merge(user: user)) }
-
   context do
-    before { post '/api/profile/friends/', params: params.to_json, headers: headers }
+    before { get '/api/profile/friends/', params: {}, headers: headers }
 
     it('returns notes') { expect(JSON.parse(response.body)).to eq resource_response }
 
@@ -73,7 +73,7 @@ RSpec.describe 'GetProfileFriendCollection', type: :request do
   context 'Unauthorized' do
     let(:value) { SecureRandom.uuid }
 
-    before { post '/api/profile/friends/', params: params.to_json, headers: headers }
+    before { get '/api/profile/friends/', params: {}, headers: headers }
 
     it('returns HTTP Status Code 401') { expect(response).to have_http_status :unauthorized }
   end

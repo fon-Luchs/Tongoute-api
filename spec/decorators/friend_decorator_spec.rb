@@ -1,52 +1,38 @@
 require 'rails_helper'
 
-RSpec.describe SubscriberDecorator do
+RSpec.describe FriendDecorator do
   let(:user)          { create(:user, first_name: 'Jarry', last_name: 'Smith') }
 
   let(:sub_user)      { create(:user, first_name: 'Jeffrey', last_name: 'Lebowski') }
 
   let(:subscriber)    { create(:subscriber, user: user, subscriber_id: sub_user.id ) }
 
+  let(:friendship)    { create(:friend, user: user, friend_id: subscriber.subscriber_id) }
+
   describe '#create.json' do
-    subject             { subscriber.decorate(context: { create: true }).as_json }
+    subject { friendship.decorate(context: { create: true }).as_json }
 
-    its([:name])        { should eq 'Jarry Smith' }
+    its([:name])   { should eq 'Jeffrey Lebowski' }
 
-    its([:status])      { should eq 'Friendship request sended' }
-
-    its([:information]) { should eq profile_information(user) }
-
-    its([:wall])    { should eq [] }
-
-    its([:groups])  { should eq 2 }
-
-    its([:friends]) { should eq user.friends.count }
-
-    its([:subscribers]) { should eq sub_user.subscribers.count }
-
-    its([:videos])  { should eq 1 }
-
-    its([:photos])  { should eq 1 }
-
-    its([:audios])  { should eq 1 }
+    its([:status]) { should eq 'Friend' }
   end
 
   describe '#show.json' do
-    subject    { subscriber.decorate.as_json }
+    subject { friendship.decorate.as_json }
 
-    its([:name]) { should eq 'Jeffrey Lebowski' }
+    its([:name])   { should eq 'Jeffrey Lebowski' }
 
-    its([:status])      { should eq 'Subscriber' }
+    its([:status]) { should eq 'Friend' }
 
     its([:information]) { should eq profile_information(sub_user) }
 
-    its([:wall])    { should eq [] }
+    its([:wall])        { should eq [] }
 
     its([:groups])  { should eq 2 }
 
     its([:friends]) { should eq sub_user.friends.count }
 
-    its([:subscribers]) { should eq sub_user.subscribers.count }
+    its([:subscribers]) { should eq 0 }
 
     its([:videos])  { should eq 1 }
 

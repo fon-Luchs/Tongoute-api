@@ -3,6 +3,7 @@ class UserDecorator < Draper::Decorator
 
   decorates_associations :notes
   decorates_associations :subscribers
+  decorates_associations :friends
 
   def as_json(*args)
     params.select { |key, value| @context.key? key }
@@ -71,20 +72,6 @@ class UserDecorator < Draper::Decorator
         id: 1332,
         name: 'Slayer',
         users: 321_42
-      }
-    ]
-  end
-
-  def friends
-    [
-      {
-        id: 32,
-        name: 'Maria Viskes'
-      },
-
-      {
-        id: 2,
-        name: 'Nikolay Miromanov'
       }
     ]
   end

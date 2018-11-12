@@ -7,7 +7,13 @@ Rails.application.routes.draw do
 
       resources :walls
 
-      resources :subscribers, only: [:show, :index]
+      resources :subscribers, only: [:show, :index] do
+        post 'accept', to: 'friends#create'
+      end
+
+      resources :friends, only: [:show, :index] do
+        delete 'remove', to: 'friends#destroy'
+      end
     end
 
     resources :users, only: [:show, :index] do
@@ -16,6 +22,12 @@ Rails.application.routes.draw do
       resources :subscribers, only: :index
 
       post 'request', to: 'subscribers#create' 
+
+      resources :friends, only: [:show, :index]
+
+      post 'accept', to: 'friends#create'
+
+      delete 'remove', to: 'friends#destroy'
     end
   end
 end

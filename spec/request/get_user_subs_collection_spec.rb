@@ -12,7 +12,7 @@ RSpec.describe 'GetUserSubsCollection', type: :request do
   let(:headers) { { 'Authorization' => "Token token=#{value}", 'Content-type' => 'application/json', 'Accept' => 'application/json' } }
 
   let(:resource_response) do
-    Subscriber.all.map do |s|
+    user.subscribers.all.map do |s|
       {
         "id" => s.user.id,
         "name" => "#{s.user.first_name} #{s.user.last_name}",

@@ -14,6 +14,7 @@ gem 'kaminari'
 gem 'email_validator'
 gem 'rails_12factor', group: :production
 gem 'validates_timeliness', '~> 5.0.0.alpha3'
+gem 'rails-observers'
 
 group :development, :test do
   gem 'simplecov'

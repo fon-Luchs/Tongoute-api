@@ -12,6 +12,7 @@ class SubscriberDecorator < Draper::Decorator
         wall: user.wall,
         groups: user.groups.count,
         friends: user.friends.count,
+        subscribers: user.subscribers.count,
         videos: user.videos.count,
         photos: user.photos.count,
         audios: user.audios.count
@@ -33,6 +34,7 @@ class SubscriberDecorator < Draper::Decorator
         wall: subscriber.wall,
         groups: subscriber.groups.count,
         friends: subscriber.friends.count,
+        subscribers: subscriber.subscribers.count,
         videos: subscriber.videos.count,
         photos: subscriber.photos.count,
         audios: subscriber.audios.count

@@ -1,6 +1,6 @@
 class Api::SubscribersController < BaseController
   before_action :build_resource, only: :create
-  
+
   private
 
   def build_resource
