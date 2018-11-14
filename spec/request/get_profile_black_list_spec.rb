@@ -1,29 +1,29 @@
 require 'rails_helper'
 
-RSpec.describe 'GetUserSubsCollection', type: :request do
+RSpec.describe 'ProfileBlackList', type: :request do
   let(:user) { create(:user, :with_auth_token) }
 
-  let(:sub_user) { create(:user, id: 1) }
+  let(:b_user) { create(:user, id: 1) }
 
-  let!(:subscriber) { create(:subscriber, user: user, id: 1, subscriber_id: sub_user.id) }
+  let(:ban)    { create(:block_user, user: user, blocked_id: b_user) }
 
   let(:value) { user.auth_token.value }
 
   let(:headers) { { 'Authorization' => "Token token=#{value}", 'Content-type' => 'application/json', 'Accept' => 'application/json' } }
 
   let(:resource_response) do
-    Subscriber.all.map do |s|
-      sub_user = User.find(s.subscriber_id)
+    BlockUser.all.map do |ban|
+      b_user = User.find(ban.blocked_id)
       {
-        "id" => sub_user.id,
-        "name" => "#{sub_user.first_name} #{sub_user.last_name}",
-        "status" => 'Subscriber'
+        "id" => b_user.id,
+        "name" => "#{b_user.first_name} #{b_user.last_name}",
+        "status" => 'Blocked'
       }
     end
   end
 
   context do
-    before { get '/api/users/1/subscribers/', params: {}, headers: headers }
+    before { get '/api/profile/blacklist', params: {}, headers: headers }
 
     it('returns notes') { expect(JSON.parse(response.body)).to eq resource_response }
 
@@ -33,7 +33,7 @@ RSpec.describe 'GetUserSubsCollection', type: :request do
   context 'Unauthorized' do
     let(:value) { SecureRandom.uuid }
 
-    before { get '/api/users/1/subscribers/', params: {}, headers: headers }
+    before { get '/api/profile/blacklist', params: {}, headers: headers }
 
     it('returns HTTP Status Code 401') { expect(response).to have_http_status :unauthorized }
   end

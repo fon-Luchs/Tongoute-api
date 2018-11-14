@@ -4,15 +4,15 @@ class Api::WallsController < BaseController
   private
 
   def build_resource
-    @post = current_user.posts.new(resource_params)
+    @post = current_user.posts.new(resource_params) unless banned?
   end
 
   def resource
-    @post ||= Post.find_by!(id: params[:id], destination_id: destination_id)
+    @post ||= Post.find_by!(id: params[:id], destination_id: destination_id) unless banned?
   end
 
   def collection
-    @posts = Post.all.where(destination_id: destination_id)
+    @posts = Post.all.where(destination_id: destination_id) unless banned?
   end
 
   def resource_params
@@ -22,5 +22,11 @@ class Api::WallsController < BaseController
   def destination_id
     id = params[:user_id] || current_user.id
     id
+  end
+
+  def banned?
+    if BlockUser.exists?(user_id: destination_id, blocked_id: current_user.id)
+      head 403
+    end
   end
 end

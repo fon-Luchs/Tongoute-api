@@ -1,6 +1,7 @@
-<%= sanitize resource.decorate(context: 
-{
-  id: :id, name: :name, information: :information, wall: :wall, groups: :groups,
-  friends: :friends, subscribers: :subscribers, videos: :videos, photos: :photos, audios: :audios
-}
-).to_json %>
+<%=
+  if banned?
+    sanitize resource.decorate(context: { banned: true }).to_json
+  else
+    sanitize resource.decorate(context: { show: true }).to_json
+  end
+%>

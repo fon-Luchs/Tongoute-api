@@ -1,13 +1,15 @@
 require 'rails_helper'
 
 RSpec.describe 'UnblockUser', type: :request do
-  let(:user) { create(:user, :with_auth_token, id: 1)}
+  let(:user) { create(:user, :with_auth_token) }
+
+  let(:b_user) { create(:user, id: 1) }
+
+  let(:ban) { create(:block_user, user: user, blocked_id: b_user.id) }
 
   let(:value) { user.auth_token.value }
 
   let(:headers) { { 'Authorization' => "Token token=#{value}", 'Content-type' => 'application/json', 'Accept' => 'application/json' } }
-
-  let!(:block) { create(:block, user: user) }
 
   context do
     before { delete '/api/users/1/unblock', params: {} , headers: headers }

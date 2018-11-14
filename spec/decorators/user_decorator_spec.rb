@@ -4,60 +4,41 @@ RSpec.describe UserDecorator do
   describe 'profile#as_json' do
     let(:profile) { create(:user, first_name: 'Jarry', last_name: 'Smith') }
 
-    subject { profile.decorate(prifile_context).as_json }
+    subject { profile.decorate(context: {profile: true}).as_json }
 
     its([:name]) { should eq 'Jarry Smith' }
 
     its([:information]) { should eq profile_information(profile) }
-
-    def prifile_context
-      {
-        context: {
-          id: :id, name: :name, information: profile_information(profile),
-          wall: :wall, groups: :groups, friends: :friends,
-          videos: :videos, photos: :photos, audios: :audios,
-          notes: :notes, bookmark: :bookmark
-        }
-      }
-    end
   end
 
   describe 'users#as_json' do
     let(:user) { create(:user, first_name: 'Jarry', last_name: 'Smith') }
 
-    context '#index.json' do
-      subject { user.decorate(resource_context).as_json }
+    context '#show.json' do
+      subject { user.decorate(context: {show: true}).as_json }
 
       its([:name]) { should eq 'Jarry Smith' }
 
       its([:information]) { should eq profile_information(user) }
     end
 
-    context '#show.json' do
-      subject { user.decorate(collection_context).as_json }
+    context '#index.json' do
+      subject { user.decorate(context: {index: true}).as_json }
 
-      its([:name]) { should eq 'Jarry Smith' }
+      its([:name])     { should eq 'Jarry Smith' }
 
       its([:location]) { should eq "#{user.country}, #{user.locate}" }
     end
+  end
 
-    def resource_context
-      {
-        context: {
-          id: :id, name: :name, information: profile_information(user),
-          wall: :wall, groups: :groups, friends: :friends,
-          videos: :videos, photos: :photos, audios: :audios
-        }
-      }
-    end
+  describe '#banned.json' do
+    let(:user) { create(:user, first_name: 'Jarry', last_name: 'Smith') }
 
-    def collection_context
-      {
-        context: {
-          id: :id, name: :name, location: :location
-        }
-      }
-    end
+    subject { user.decorate(context: {banned: true}).as_json }
+
+    its([:name])   { should eq 'Jarry Smith' }
+
+    its([:status]) { should eq 'This user add you in black list' }
   end
 
   def profile_information(profile)

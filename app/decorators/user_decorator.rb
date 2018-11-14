@@ -4,27 +4,56 @@ class UserDecorator < Draper::Decorator
   decorates_associations :notes
   decorates_associations :subscribers
   decorates_associations :friends
+  decorates_associations :block_users
 
   def as_json(*args)
-    params.select { |key, value| @context.key? key }
-  end
+    if context[:show]
+      {
+        id: object.id,
+        name: name,
+        location: location,
+        information: info,
+        wall: wall,
+        groups: groups,
+        friends: friends,
+        subscribers: subscribers,
+        videos: videos,
+        photos: photos,
+        audios: audios,
+      }
 
-  def params
-    {
-      id: object.id,
-      name: name,
-      location: location,
-      information: info,
-      wall: wall,
-      groups: groups,
-      friends: friends,
-      subscribers: subscribers,
-      videos: videos,
-      photos: photos,
-      audios: audios,
-      notes: notes,
-      bookmark: bookmark
-    }
+    elsif context[:index]
+      {
+        id: object.id,
+        name: name,
+        location: location
+      }
+    
+    elsif context[:profile]
+      {
+        id: object.id,
+        name: name,
+        location: location,
+        information: info,
+        wall: wall,
+        groups: groups,
+        friends: friends,
+        subscribers: subscribers,
+        black_list: block_users,
+        videos: videos,
+        photos: photos,
+        audios: audios,
+        notes: notes,
+        bookmark: bookmark
+      }
+    
+    else
+      {
+        id: object.id,
+        name: name,
+        status: 'This user add you in black list'
+      }
+    end  
   end
 
   def name

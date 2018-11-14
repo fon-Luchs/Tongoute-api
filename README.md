@@ -242,3 +242,51 @@ curl -H 'Accept: application/json' \
      -H 'Authorization: Token token="XXXX-YYYY-ZZZZ"' \
       localhost:3000/api/users/:id/subscribers
 ```
+
+### Add User in black list
+
+```
+curl -H 'Accept: application/json' \
+     -H 'Authorization: Token token="XXXX-YYYY-ZZZZ"' \
+     -X POSTlocalhost:3000/api/users/:id/block
+
+curl -H 'Accept: application/json' \
+     -H 'Authorization: Token token="XXXX-YYYY-ZZZZ"' \
+     -X POST localhost:3000/api/profile/subscribers/:id/block
+
+curl -H 'Accept: application/json' \
+     -H 'Authorization: Token token="XXXX-YYYY-ZZZZ"' \
+     -X POST localhost:3000/api/profile/friends/:id/block
+```
+
+### Black List Index
+
+```
+curl -H 'Accept: application/json' \
+     -H 'Authorization: Token token="XXXX-YYYY-ZZZZ"' \
+      localhost:3000/api/profile/blacklist/
+```
+
+### User Show in black list
+
+```
+curl -H 'Accept: application/json' \
+     -H 'Authorization: Token token="XXXX-YYYY-ZZZZ"' \
+      localhost:3000/api/profile/blacklist/:id
+```
+
+### Remove User from black list
+
+```
+curl -H 'Accept: application/json' \
+     -H 'Authorization: Token token="XXXX-YYYY-ZZZZ"' \
+     -X DELETE localhost:3000/api/users/:id/unblock
+
+curl -H 'Accept: application/json' \
+     -H 'Authorization: Token token="XXXX-YYYY-ZZZZ"' \
+     -X DELETE localhost:3000/api/profile/subscribers/:id/unblock
+
+curl -H 'Accept: application/json' \
+     -H 'Authorization: Token token="XXXX-YYYY-ZZZZ"' \
+     -X DELETE localhost:3000/api/profile/friends/:id/unblock
+```
