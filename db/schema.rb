@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_10_142457) do
+ActiveRecord::Schema.define(version: 2018_11_16_110402) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -30,14 +30,6 @@ ActiveRecord::Schema.define(version: 2018_11_10_142457) do
     t.index ["user_id"], name: "index_block_users_on_user_id"
   end
 
-  create_table "friends", force: :cascade do |t|
-    t.bigint "user_id"
-    t.integer "friend_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_friends_on_user_id"
-  end
-
   create_table "notes", force: :cascade do |t|
     t.string "title"
     t.text "body"
@@ -55,12 +47,14 @@ ActiveRecord::Schema.define(version: 2018_11_10_142457) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "subscribers", force: :cascade do |t|
-    t.bigint "user_id"
+  create_table "relationships", force: :cascade do |t|
     t.integer "subscriber_id"
+    t.integer "subscribed_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_subscribers_on_user_id"
+    t.index ["subscribed_id"], name: "index_relationships_on_subscribed_id"
+    t.index ["subscriber_id", "subscribed_id"], name: "index_relationships_on_subscriber_id_and_subscribed_id", unique: true
+    t.index ["subscriber_id"], name: "index_relationships_on_subscriber_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -81,6 +75,4 @@ ActiveRecord::Schema.define(version: 2018_11_10_142457) do
   end
 
   add_foreign_key "block_users", "users"
-  add_foreign_key "friends", "users"
-  add_foreign_key "subscribers", "users"
 end

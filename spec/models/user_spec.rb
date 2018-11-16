@@ -9,8 +9,6 @@ RSpec.describe User, type: :model do
 
   it { should have_many(:groups) }
 
-  it { should have_many(:friends) }
-
   it { should have_many(:videos) }
 
   it { should have_many(:notes).dependent(:destroy) }
@@ -34,6 +32,8 @@ RSpec.describe User, type: :model do
   it { should have_many(:documents) }
 
   it { should have_many(:relation).dependent(:destroy) }
+
+  it { should have_many(:active_relationship).class_name('Relationship') }
 
   it { should validate_presence_of(:first_name) }
 

@@ -7,9 +7,18 @@ class User < ApplicationRecord
 
   has_many :posts
 
-  has_many :subscribers
+  has_many :active_relationship, class_name: 'Relationship',
+                                 foreign_key: 'subscriber_id',
+                                 dependent: :destroy
 
-  has_many :friends
+  
+  has_many :pasive_relationship, class_name: 'Relationship',
+                                 foreign_key: 'subscribed_id',
+                                 dependent: :destroy
+
+  has_many :subscribing, through: :active_relationship, source: :subscribed
+
+  has_many :subscribers, through: :pasive_relationship, source: :subscriber
 
   has_many :block_users
 
