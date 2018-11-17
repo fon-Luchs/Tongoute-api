@@ -5,18 +5,17 @@ RSpec.describe 'GetUserSubsCollection', type: :request do
 
   let(:sub_user) { create(:user, id: 1) }
 
-  let!(:subscriber) { create(:subscriber, user: user, id: 1, subscriber_id: sub_user.id) }
+  let!(:subscriber) { create(:relationship, subscriber_id: sub_user.id, subscribed_id: user.id, id: 1) }
 
   let(:value) { user.auth_token.value }
 
   let(:headers) { { 'Authorization' => "Token token=#{value}", 'Content-type' => 'application/json', 'Accept' => 'application/json' } }
 
   let(:resource_response) do
-    Subscriber.all.map do |s|
-      sub_user = User.find(s.subscriber_id)
+    user.subscribers.all.map do |s|
       {
-        "id" => sub_user.id,
-        "name" => "#{sub_user.first_name} #{sub_user.last_name}",
+        "id" => s.id,
+        "name" => "#{s.first_name} #{s.last_name}",
         "status" => 'Subscriber'
       }
     end

@@ -3,19 +3,19 @@ require 'rails_helper'
 RSpec.describe 'GetProfileSubsCollection', type: :request do
   let(:user) { create(:user, :with_auth_token) }
 
-  let(:sub_user) { create(:user, id: 1) }
-
-  let!(:subscriber) { create(:subscriber, user: user, id: 1, subscriber_id: sub_user.id) }
+  let(:sub_user) { create(:user, id: 1, first_name: 'Jarry') }
+ 
+  let!(:subscriber) { create(:relationship, subscriber_id: sub_user.id, subscribed_id: user.id, id: 1) }
 
   let(:value) { user.auth_token.value }
 
   let(:headers) { { 'Authorization' => "Token token=#{value}", 'Content-type' => 'application/json', 'Accept' => 'application/json' } }
 
   let(:resource_response) do
-    Subscriber.all.map do |s|
+    user.subscribers.all.map do |s|
       {
-        "id" => s.user.id,
-        "name" => "#{s.user.first_name} #{s.user.last_name}",
+        "id" => s.id,
+        "name" => "Jarry #{s.last_name}",
         "status" => 'Subscriber'
       }
     end

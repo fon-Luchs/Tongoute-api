@@ -2,9 +2,8 @@ class UserDecorator < Draper::Decorator
   delegate_all
 
   decorates_associations :notes
-  decorates_associations :subscribers
-  decorates_associations :friends
   decorates_associations :block_users
+  decorates_associations :subscribers
 
   def as_json(*args)
     if context[:show]
@@ -47,12 +46,19 @@ class UserDecorator < Draper::Decorator
         bookmark: bookmark
       }
     
-    else
+    elsif context[:banned]
       {
         id: object.id,
         name: name,
         status: 'This user add you in black list'
       }
+
+    else
+    {
+      id: object.id,
+      name: name,
+      status: 'Subscriber'
+    }  
     end  
   end
 
@@ -74,6 +80,14 @@ class UserDecorator < Draper::Decorator
 
   def location
     [country, locate].join(', ')
+  end
+
+  def friends
+  {
+    id: 33,
+    name: 'Jarry Smith',
+    relations: 'Friend'
+  }
   end
 
   def relations

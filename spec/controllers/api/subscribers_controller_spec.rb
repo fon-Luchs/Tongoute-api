@@ -4,20 +4,20 @@ RSpec.describe Api::SubscribersController, type: :controller do
   describe 'routes test' do
     it { should route(:get, '/api/profile/subscribers').to(action: :index, controller: 'api/subscribers') }
 
-    it { should route(:get, '/api/profile/subscribers/1').to(action: :show, controller: 'api/subscribers', id: 1) }
-
     it { should route(:get, '/api/users/1/subscribers').to(action: :index, controller: 'api/subscribers', user_id: 1) }
 
-    it { should route(:post, '/api/users/1/request').to(action: :create, controller: 'api/subscribers', user_id: 1) }
+    it { should route(:get, '/api/profile/subscribers/1').to(action: :show, controller: 'api/subscribers', id: 1) }
+
+    it { should route(:get, '/api/users/1/subscribers/1').to(action: :show, controller: 'api/subscribers', user_id: 1, id: 1) }
   end
-
-  let(:user) { create(:user, :with_auth_token) }
-
-  let(:value) { user.auth_token.value }
+  
+  let(:user) { create(:user, :with_auth_token, :with_information) }
 
   let(:sub_user) { create(:user) }
 
-  let(:subscriber) { create(:subscriber, user: user, subscriber_id: sub_user.id) }
+  let(:value) { user.auth_token.value }
+  
+  let(:relationship) { create(:relationship, subscriber_id: sub_user.id, subscribed_id: user.id, id: 1) }
 
   before { sign_in user }
 
@@ -29,57 +29,20 @@ RSpec.describe Api::SubscribersController, type: :controller do
     }
   end
 
-  describe '#create.json' do
-    before { expect(User).to receive(:find).with(user.id.to_s).and_return(user) }
-
-    before { expect(user).to receive_message_chain(:subscribers, :new).and_return(subscriber) }
-
-    context 'success' do
-      before { expect(subscriber).to receive(:save).and_return(true) }
-
-      before { merge_header }
-
-      before { post :create, params: { user_id: user.id }, format: :json }
-
-      it { should render_template :create }
-    end
-
-    context 'fail' do
-      before { expect(subscriber).to receive(:save).and_return(false) }
-
-      before { merge_header }
-
-      before { post :create, params: { user_id: user.id }, format: :json }
-
-      it { should render_template :errors }
-    end
-
-  end
-
   describe '#show.json' do
     before { merge_header }
 
-    before { get :show, params: { id: subscriber.id }, format: :json }
+    before { get :show, params: { id: relationship.id }, format: :json }
 
     it { should render_template :show }
   end
 
   describe '#index.json' do
-    context 'User' do
-      before { merge_header }
+    before { merge_header }
 
-      before { get :index, params: { user_id: user.id }, format: :json }
-  
-      it { should render_template :index }
-    end
+    before { get :index, format: :json }
 
-    context 'Profile' do
-      before { merge_header }
-
-      before { get :index, format: :json }
-  
-      it { should render_template :index }
-    end
+    it { should render_template :index }
   end
 
   def merge_header

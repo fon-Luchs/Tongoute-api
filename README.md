@@ -215,20 +215,16 @@ curl -H 'Accept: application/json' \
      -X DELETE localhost:3000/api/user/:user_id/walls/:id
 ```
 
-### Subscriber Create
-
-```
-curl -H 'Accept: application/json' \
-     -H 'Authorization: Token token="XXXX-YYYY-ZZZZ"' \
-     -X POST localhost:3000/api/users/:id/request
-```
-
 ### Subscriber Show
 
 ```
 curl -H 'Accept: application/json' \
      -H 'Authorization: Token token="XXXX-YYYY-ZZZZ"' \
       localhost:3000/api/profile/subscribers/:id
+
+curl -H 'Accept: application/json' \
+     -H 'Authorization: Token token="XXXX-YYYY-ZZZZ"' \
+      localhost:3000/api/users/:id/subscribers/:id
 ```
 
 ### Subscriber Index
