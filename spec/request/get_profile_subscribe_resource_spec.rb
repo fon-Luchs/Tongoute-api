@@ -1,19 +1,15 @@
 require 'rails_helper'
 
-RSpec.describe 'InviteUserToFriend', type: :request do
-  let(:user) { create(:user, :with_auth_token)}
+RSpec.describe 'GetProfileSubscribeResource', type: :request do
+  let(:user) { create(:user, :with_auth_token) }
 
-  let(:sub_user) { create(:user) }
+  let(:sub_user) { create(:user, id: 1) }
+
+  let!(:subscriber) { create(:relationship, subscriber_id: sub_user.id, subscribed_id: user.id, id: 1) }
 
   let(:value) { user.auth_token.value }
 
   let(:headers) { { 'Authorization' => "Token token=#{value}", 'Content-type' => 'application/json', 'Accept' => 'application/json' } }
-
-  let(:resource_params) { attributes_for(:relationship) }
-
-  let(:params) { { subscriber: resource_params } }
-
-  let(:subscriber) { Relationship.last }
 
   let(:groups) do
     sub_user.groups.map do |group|
@@ -38,9 +34,9 @@ RSpec.describe 'InviteUserToFriend', type: :request do
       "email" => sub_user.email,
       "number" => sub_user.number,
       "bday" => sub_user.date,
-      "relations" => relations,
-      "location" => "#{sub_user.country}, #{sub_userr.locate}",
-      "address" => sub_user.adres,
+      "relations" => sub_relations,
+      "location" => "#{sub_user.country}, #{sub_user.locate}",
+      "address" => sub_user.address,
       "about self" => sub_user.about
     }
   end
@@ -49,21 +45,19 @@ RSpec.describe 'InviteUserToFriend', type: :request do
     {
       "id" => sub_user.id,
       "name" => "#{sub_user.first_name} #{sub_user.last_name}",
-      "status" => 'Friend request sended',
+      "status" => 'Subscribed',
       "information" => info,
       "wall" => sub_user.wall,
       "groups" => sub_user.groups.count,
       "friends" => sub_user.friends,
       "video" => sub_user.videos,
       "photos" => sub_user.photos,
-      "audios" => sub_user.audios
+      "audios" => sub_user.audios,
     }
   end
 
-  before { create(:relationship, resource_params.merge(subscriber_id: user.id, subscribed_id: sub_user.id)) }
-
   context do
-    before { post '/api/users/1/request', params: {}, headers: headers }
+    before { get '/api/profile/subscribings/1', params: {}, headers: headers }
 
     it('returns notes') { expect(JSON.parse(response.body)).to eq resource_response }
 
@@ -73,7 +67,7 @@ RSpec.describe 'InviteUserToFriend', type: :request do
   context 'Unauthorized' do
     let(:value) { SecureRandom.uuid }
 
-    before { post '/api/users/1/request', params: {}, headers: headers }
+    before { get '/api/profile/subscribings/1', params: {}, headers: headers }
 
     it('returns HTTP Status Code 401') { expect(response).to have_http_status :unauthorized }
   end

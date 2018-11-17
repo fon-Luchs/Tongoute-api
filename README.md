@@ -239,6 +239,30 @@ curl -H 'Accept: application/json' \
       localhost:3000/api/users/:id/subscribers
 ```
 
+### Subscribed show
+
+```
+curl -H 'Accept: application/json' \
+     -H 'Authorization: Token token="XXXX-YYYY-ZZZZ"' \
+      localhost:3000/api/profile/subscribings/:id
+```
+
+### Subscribed index
+
+```
+curl -H 'Accept: application/json' \
+     -H 'Authorization: Token token="XXXX-YYYY-ZZZZ"' \
+      localhost:3000/api/profile/subscriberings
+```
+
+### Subscribed create
+
+```
+curl -H 'Accept: application/json' \
+     -H 'Authorization: Token token="XXXX-YYYY-ZZZZ"' \
+     -X POST localhost:3000/api/users/:id/request
+```
+
 ### Add User in black list
 
 ```

@@ -25,6 +25,43 @@ class RelationshipDecorator < Draper::Decorator
       name: subscriber.name,
       status: 'Subscriber'
     }
+
+    elsif context[:subscribed_show]
+    {
+      id: subscribed.id,
+      name: subscribed.name,
+      status: 'Subscribed',
+      information: subscribed.info,
+      wall: subscribed.wall,
+      groups: subscribed.groups.count,
+      friends: subscribed.friends.count,
+      subscribers: subscribed.subscribers.count,
+      videos: subscribed.videos.count,
+      photos: subscribed.photos.count,
+      audios: subscribed.audios.count
+    }
+
+    elsif context[:subscribed_index]
+    {
+      id: subscribed.id,
+      name: subscribed.name,
+      status: 'Subscribed'
+    }
+
+    elsif context[:subscribed_create]
+    {
+      id: subscribed.id,
+      name: subscribed.name,
+      status: 'Friend request sended',
+      information: subscribed.info,
+      wall: subscribed.wall,
+      groups: subscribed.groups.count,
+      friends: subscribed.friends.count,
+      subscribers: subscribed.subscribers.count,
+      videos: subscribed.videos.count,
+      photos: subscribed.photos.count,
+      audios: subscribed.audios.count
+    }
     end
   end
   
