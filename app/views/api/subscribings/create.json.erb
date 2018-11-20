@@ -1,1 +1,7 @@
-<%= sanitize collection.decorate(context: {subscribed_create: true}).to_json %>
+<%=
+  if friend_request?
+    sanitize collection.decorate(context: {friend_show: true}).to_json
+  else
+    sanitize collection.decorate(context: {subscribed_show: true}).to_json
+  end
+%>

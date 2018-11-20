@@ -1,1 +1,1 @@
-<%= sanitize resource.decorate.to_json %>
+<%= sanitize resource.decorate(context: {friend_show: true}).to_json %>

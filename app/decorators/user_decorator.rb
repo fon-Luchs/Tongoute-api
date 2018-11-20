@@ -4,54 +4,122 @@ class UserDecorator < Draper::Decorator
   decorates_associations :notes
   decorates_associations :block_users
   decorates_associations :subscribers
+  decorates_associations :subscribing
 
   def as_json(*args)
     if context[:show]
-      {
-        id: object.id,
-        name: name,
-        location: location,
-        information: info,
-        wall: wall,
-        groups: groups,
-        friends: friends,
-        subscribers: subscribers,
-        videos: videos,
-        photos: photos,
-        audios: audios,
-      }
+    {
+      id: object.id,
+      name: name,
+      location: location,
+      information: info,
+      wall: wall,
+      groups: groups,
+      friends: friends,
+      subscribers: subscribers,
+      videos: videos,
+      photos: photos,
+      audios: audios,
+    }
 
     elsif context[:index]
-      {
-        id: object.id,
-        name: name,
-        location: location
-      }
+    {
+      id: object.id,
+      name: name,
+      location: location
+    }
     
     elsif context[:profile]
-      {
-        id: object.id,
-        name: name,
-        location: location,
-        information: info,
-        wall: wall,
-        groups: groups,
-        friends: friends,
-        subscribers: subscribers,
-        black_list: block_users,
-        videos: videos,
-        photos: photos,
-        audios: audios,
-        notes: notes,
-        bookmark: bookmark
-      }
+    {
+      id: object.id,
+      name: name,
+      location: location,
+      information: info,
+      wall: wall,
+      groups: groups,
+      friends: friends,
+      subscribers: subscribers,
+      subscribing: subscribing,
+      black_list: block_users,
+      videos: videos,
+      photos: photos,
+      audios: audios,
+      notes: notes,
+      bookmark: bookmark
+    }
     
     elsif context[:banned]
-      {
-        id: object.id,
-        name: name,
-        status: 'This user add you in black list'
-      }
+    {
+      id: object.id,
+      name: name,
+      status: 'This user add you in black list'
+    }
+
+    elsif context[:subscriber_show]
+    {
+      id: object.id,
+      name: name,
+      status: 'Subscriber',
+      information: info,
+      wall: wall,
+      groups: groups.count,
+      friends: friends.count,
+      subscribers: subscribers.count,
+      videos: videos.count,
+      photos: photos.count,
+      audios: audios.count
+    }
+
+    elsif context[:subscriber_index]
+    {  
+      id: object.id,
+      name: name,
+      status: 'Subscriber'
+    }
+
+    elsif context[:subscribed_show]
+    {
+      id: object.id,
+      name: name,
+      status: 'Subscribed',
+      information: info,
+      wall: wall,
+      groups: groups.count,
+      friends: friends.count,
+      subscribers: subscribers.count,
+      videos: videos.count,
+      photos: photos.count,
+      audios: audios.count
+    }
+
+    elsif context[:subscribed_index]
+    {
+      id: object.id,
+      name: name,
+      status: 'Subscribed'
+    }
+
+    elsif context[:friend_show]
+    {
+      id: object.id,
+      name: name,
+      status: 'Friend',
+      information: info,
+      wall: wall,
+      groups: groups.count,
+      friends: friends.count,
+      subscribers: subscribers.count,
+      videos: videos.count,
+      photos: photos.count,
+      audios: audios.count
+    }
+
+    elsif context[:friend_index]
+    {
+      id: object.id,
+      name: name,
+      status: 'Friend'
+    }
 
     else
     {
@@ -83,11 +151,12 @@ class UserDecorator < Draper::Decorator
   end
 
   def friends
-  {
-    id: 33,
-    name: 'Jarry Smith',
-    relations: 'Friend'
-  }
+    friends = FriendFinder.new(self).all
+    if friends.empty?
+      []
+    else
+      friends.decorate(context: {friend_index: true}).as_json
+    end
   end
 
   def relations

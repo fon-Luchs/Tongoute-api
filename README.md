@@ -252,7 +252,7 @@ curl -H 'Accept: application/json' \
 ```
 curl -H 'Accept: application/json' \
      -H 'Authorization: Token token="XXXX-YYYY-ZZZZ"' \
-      localhost:3000/api/profile/subscriberings
+      localhost:3000/api/profile/subscribings
 ```
 
 ### Subscribed create
@@ -261,6 +261,42 @@ curl -H 'Accept: application/json' \
 curl -H 'Accept: application/json' \
      -H 'Authorization: Token token="XXXX-YYYY-ZZZZ"' \
      -X POST localhost:3000/api/users/:id/request
+```
+
+### Friend create
+
+```
+curl -H 'Accept: application/json' \
+     -H 'Authorization: Token token="XXXX-YYYY-ZZZZ"' \
+     -X POST localhost:3000/api/users/:id/accept
+
+curl -H 'Accept: application/json' \
+     -H 'Authorization: Token token="XXXX-YYYY-ZZZZ"' \
+     -X POST localhost:3000/api/profile/subscribings/:id/accept
+```
+
+### Friend show
+
+```
+curl -H 'Accept: application/json' \
+     -H 'Authorization: Token token="XXXX-YYYY-ZZZZ"' \
+      localhost:3000/api/users/:id/friends/:id
+
+curl -H 'Accept: application/json' \
+     -H 'Authorization: Token token="XXXX-YYYY-ZZZZ"' \
+      localhost:3000/api/profile/friends/:id
+```
+
+### Friend index
+
+```
+curl -H 'Accept: application/json' \
+     -H 'Authorization: Token token="XXXX-YYYY-ZZZZ"' \
+      localhost:3000/api/users/:id/friends
+
+curl -H 'Accept: application/json' \
+     -H 'Authorization: Token token="XXXX-YYYY-ZZZZ"' \
+      localhost:3000/api/profile/friends
 ```
 
 ### Add User in black list

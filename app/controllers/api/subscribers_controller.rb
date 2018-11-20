@@ -3,7 +3,7 @@ class Api::SubscribersController < BaseController
   private
 
   def resource
-    @subscriber = set_user.subscribers.find(params[:subscriber_id])
+    @subscriber = set_user.subscribers.find(params[:id])
   end
 
   def collection

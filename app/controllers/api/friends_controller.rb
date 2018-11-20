@@ -3,25 +3,20 @@ class Api::FriendsController < BaseController
 
   private
 
-  def build_resource
-    @friendship = current_user.friends.new(resource_params)
-  end
-
   def resource
-    @friendship ||= current_user.friends.find(params[:id])
+    @friend ||= FriendFinder.new(current_user).find(set_user)
   end
 
   def collection
-    @friendship = Friend.all
+    @friends = FriendFinder.new(current_user).all
   end
 
-  def resource_params
-    { friend_id: subscriber }
-  end
-
-  def subscriber
-    return @subscriber if @subscriber
-    @subscriber_id = params[:subscriber_id] if params[:subscriber_id]
-    @subscriber_id = params[:user_id] if params[:user_id]
+  def set_user
+    return @user if @user
+    @user = current_user.subscribers.find(params[:subscriber_id]) if params[:subscriber_id]
+    @user = current_user.subscribers.find(params[:user_id]) if params[:user_id]
+    @user = current_user.subscribers.find(params[:id]) if params[:id]
+    @user = current_user.subscribers.find(params[:friend_id]) if params[:friend_id]
+    @user
   end
 end

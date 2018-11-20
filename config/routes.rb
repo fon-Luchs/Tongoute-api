@@ -8,12 +8,16 @@ Rails.application.routes.draw do
       resources :walls
 
       resources :friends, only: [:show, :index] do
+        delete 'remove', to: 'subscribings#destroy'
+
         post 'block', to: 'block_users#create'
 
         delete 'unblock', to: 'block_users#destroy'
       end
       
-      resources :subscribers, only: [:index, :show]
+      resources :subscribers, only: [:index, :show] do
+        post 'request', to: 'subscribings#create'
+      end
 
       resources :subscribings, only: [:create, :show, :index]
 
@@ -32,6 +36,10 @@ Rails.application.routes.draw do
       post 'block', to: 'block_users#create'
 
       delete 'unblock', to: 'block_users#destroy'
+
+      resources :friends, only: [:show, :index]
+
+      delete 'remove', to: 'subscribings#destroy'
     end
   end
 end

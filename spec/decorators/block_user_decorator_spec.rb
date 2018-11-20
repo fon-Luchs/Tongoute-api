@@ -19,7 +19,7 @@ RSpec.describe BlockUserDecorator do
 
   its([:groups])  { should eq 2 }
 
-  its([:friends]) { should eq b_user.friends.count }
+  its([:friends]) { should eq 0 }
 
   its([:subscribers]) { should eq b_user.subscribers.count }
 
