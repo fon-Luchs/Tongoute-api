@@ -17,6 +17,10 @@ Rails.application.routes.draw do
       
       resources :subscribers, only: [:index, :show] do
         post 'request', to: 'subscribings#create'
+
+        post 'block', to: 'block_users#create'
+
+        delete 'unblock', to: 'block_users#destroy'
       end
 
       resources :subscribings, only: [:create, :show, :index]
@@ -24,6 +28,8 @@ Rails.application.routes.draw do
       get 'blacklist', to: 'block_users#index'
 
       get 'blacklist/:id', to: 'block_users#show'
+
+      delete 'blacklist/:id/unblock', to: 'block_users#destroy'
     end
 
     resources :users, only: [:show, :index] do

@@ -10,6 +10,8 @@ RSpec.describe Api::BlockUsersController, type: :controller do
 
     it { should route(:delete, '/api/users/1/unblock').to(action: :destroy, controller: 'api/block_users', user_id: 1) }
 
+    it { should route(:delete, '/api/profile/blacklist/1/unblock').to(action: :destroy, controller: 'api/block_users', id: 1) }
+
     it { should route(:post, '/api/profile/subscribers/1/block').to(action: :create, controller: 'api/block_users', subscriber_id: 1) }
 
     it { should route(:delete, '/api/profile/subscribers/1/unblock').to(action: :destroy, controller: 'api/block_users', subscriber_id: 1) }
@@ -25,7 +27,7 @@ RSpec.describe Api::BlockUsersController, type: :controller do
 
   let(:block_user) { create(:user) }
 
-  let(:blacklist) { create(:block_user, user: user, blocked_id: block_user.id) }
+  let(:ban) { create(:black_list, blocker_id: user.id, blocked_id: block_user.id) }
 
   before { sign_in user }
 
@@ -39,13 +41,13 @@ RSpec.describe Api::BlockUsersController, type: :controller do
 
   describe '#create.json' do
     before do
-      expect(user).to receive_message_chain(:block_users, :new)
+      expect(user).to receive_message_chain(:active_block, :new)
         .with(no_args).with( { blocked_id: block_user.id } )
-        .and_return(blacklist)
+        .and_return(ban)
     end
 
     context 'success' do
-      before { expect(blacklist).to receive(:save).and_return(true) }
+      before { expect(ban).to receive(:save).and_return(true) }
 
       before { merge_header }
 
@@ -55,7 +57,7 @@ RSpec.describe Api::BlockUsersController, type: :controller do
     end
 
     context 'fails' do
-      before { expect(blacklist).to receive(:save).and_return(false) }
+      before { expect(ban).to receive(:save).and_return(false) }
 
       before { merge_header }
 
@@ -66,7 +68,13 @@ RSpec.describe Api::BlockUsersController, type: :controller do
   end
 
   describe '#destroy.json' do
-    let(:params) { { user_id: block_user.id, id: blacklist.id } }
+    let(:params) { { user_id: block_user.id, id: ban.id } }
+
+    before do
+      expect(user).to receive_message_chain(:blocking, :find)
+        .with(no_args).with(ban.id.to_s)
+        .and_return(block_user)
+    end
 
     before { merge_header }
 
@@ -78,7 +86,7 @@ RSpec.describe Api::BlockUsersController, type: :controller do
   describe '#show.json' do
     before { merge_header }
 
-    before { get :show, params: { id: blacklist.id }, format: :json }
+    before { get :show, params: { id: ban.id }, format: :json }
 
     it { should render_template :show }
   end

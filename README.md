@@ -304,7 +304,7 @@ curl -H 'Accept: application/json' \
 ```
 curl -H 'Accept: application/json' \
      -H 'Authorization: Token token="XXXX-YYYY-ZZZZ"' \
-     -X POSTlocalhost:3000/api/users/:id/block
+     -X POST localhost:3000/api/users/:id/block
 
 curl -H 'Accept: application/json' \
      -H 'Authorization: Token token="XXXX-YYYY-ZZZZ"' \

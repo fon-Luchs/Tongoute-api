@@ -9,6 +9,14 @@ RSpec.describe UserDecorator do
     its([:name]) { should eq 'Jarry Smith' }
 
     its([:information]) { should eq profile_information(profile) }
+
+    its([:location]) { should eq "#{user.country}, #{user.locate}" }
+
+    its([:wall]) { should eq Post.where(destination_id: user.id) }
+
+    its([:groups])  { should eq groups }
+
+    its([:friends]) { should eq FriendFinder.new(profile).all }
   end
 
   describe 'users#as_json' do
@@ -29,16 +37,6 @@ RSpec.describe UserDecorator do
 
       its([:location]) { should eq "#{user.country}, #{user.locate}" }
     end
-  end
-
-  describe '#banned.json' do
-    let(:user) { create(:user, first_name: 'Jarry', last_name: 'Smith') }
-
-    subject { user.decorate(context: {banned: true}).as_json }
-
-    its([:name])   { should eq 'Jarry Smith' }
-
-    its([:status]) { should eq 'This user add you in black list' }
   end
 
   let(:user)          { create(:user, first_name: 'Jarry', last_name: 'Smith') }
@@ -144,6 +142,68 @@ RSpec.describe UserDecorator do
 
     its([:status]) { should eq 'Friend' }
 
+  end
+
+  describe '#blocked.json' do
+    let(:user) { create(:user, first_name: 'Jarry', last_name: 'Smith') }
+
+    subject { user.decorate(context: {blocked: true}).as_json }
+
+    its([:name])   { should eq 'Jarry Smith' }
+
+    its([:status]) { should eq 'This user add you in black list' }
+  end
+
+  describe 'Block#show.json' do
+    let(:b_user) { create(:user, first_name: 'Jeffrey', last_name: 'Lebowski') }
+
+    subject      { b_user.decorate(context: {block_show: true}).as_json }
+
+    its([:name]) { should eq 'Jeffrey Lebowski' }
+
+    its([:status])      { should eq 'Banned' }
+
+    its([:information]) { should eq profile_information(b_user) }
+
+    its([:wall])    { should eq [] }
+
+    its([:groups])  { should eq 2 }
+
+    its([:friends]) { should eq 0 }
+
+    its([:subscribers]) { should eq b_user.subscribers.count }
+
+    its([:videos])  { should eq 1 }
+
+    its([:photos])  { should eq 1 }
+
+    its([:audios])  { should eq 1 }
+  end
+
+  describe 'Block#index.json' do
+    let(:b_user) { create(:user, first_name: 'Jeffrey', last_name: 'Lebowski') }
+
+    subject      { b_user.decorate(context: {block_index: true}).as_json }
+
+    its([:name]) { should eq 'Jeffrey Lebowski' }
+
+    its([:status])      { should eq 'Banned' }
+  end
+
+  def groups
+    [
+      {
+        id: 1,
+        name: 'Tongoute Community',
+        users: 133_221
+      },
+
+      {
+        id: 1332,
+        name: 'Slayer',
+        users: 321_42
+      }
+    ]
   end
 
   def profile_information(profile)

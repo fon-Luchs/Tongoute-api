@@ -20,7 +20,17 @@ class User < ApplicationRecord
 
   has_many :subscribers, through: :pasive_relationship, source: :subscriber
 
-  has_many :block_users
+  has_many :active_block, class_name: 'BlackList',
+                        foreign_key:'blocker_id',
+                        dependent: :destroy
+  
+  has_many :pasive_block, class_name: 'BlackList',
+                        foreign_key:'blocked_id',
+                        dependent: :destroy
+
+  has_many :blocking, through: :active_block, source: :blocked
+
+  has_many :blockers, through: :pasive_block, source: :blocker
 
   validates :email, presence: true, uniqueness: { case_sensitive: false }
 

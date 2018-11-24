@@ -4,26 +4,27 @@ class Api::BlockUsersController < BaseController
   private
 
   def build_resource
-    @block_user = current_user.block_users.new(resource_params)
+    @block_user = current_user.active_block.new(resource_params)
   end
 
   def resource
-    @block_user ||= current_user.block_users.find(params[:id])
+    @block_user ||= set_user
   end
 
   def collection
-    @block_users = current_user.block_users
+    @block_users = current_user.banning
   end
 
   def resource_params
-    { blocked_id: get_user_for_block.id }
+    { blocked_id: set_user.id }
   end
 
-  def get_user_for_block
+  def set_user
     @b_user if @b_user
-    @b_user = User.find(params[:subscriber_id]) if params[:subscriber_id]
-    @b_user = User.find(params[:friend_id]) if params[:friend_id]
+    @b_user = current_user.subscriber.find(params[:subscriber_id]) if params[:subscriber_id]
+    @b_user = FriendFinder.new(current_user).find(params[:friend_id]) if params[:friend_id]
     @b_user = User.find(params[:user_id]) if params[:user_id]
+    @b_user = current_user.blocking.find(params[:id]) if params[:id]
     @b_user
   end
 end

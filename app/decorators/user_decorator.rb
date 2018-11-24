@@ -5,6 +5,7 @@ class UserDecorator < Draper::Decorator
   decorates_associations :block_users
   decorates_associations :subscribers
   decorates_associations :subscribing
+  decorates_associations :blocking
 
   def as_json(*args)
     if context[:show]
@@ -40,7 +41,7 @@ class UserDecorator < Draper::Decorator
       friends: friends,
       subscribers: subscribers,
       subscribing: subscribing,
-      black_list: block_users,
+      black_list: blocking,
       videos: videos,
       photos: photos,
       audios: audios,
@@ -48,11 +49,33 @@ class UserDecorator < Draper::Decorator
       bookmark: bookmark
     }
     
-    elsif context[:banned]
+    elsif context[:blocked]
     {
       id: object.id,
       name: name,
       status: 'This user add you in black list'
+    }
+
+    elsif context[:block_show]
+    {
+      id: object.id,
+      name: name,
+      status: 'Banned',
+      information: info,
+      wall: wall,
+      groups: groups.count,
+      friends: friends.count,
+      subscribers: subscribers.count,
+      videos: videos.count,
+      photos: photos.count,
+      audios: audios.count
+    }
+
+  elsif context[:block_index]
+    {
+      id: object.id,
+      name: name,
+      status: 'Banned'
     }
 
     elsif context[:subscriber_show]
@@ -152,11 +175,19 @@ class UserDecorator < Draper::Decorator
 
   def friends
     friends = FriendFinder.new(self).all
-    if friends.empty?
-      []
-    else
-      friends.decorate(context: {friend_index: true}).as_json
-    end
+    friends.decorate(context: {friend_index: true})
+  end
+
+  def subscribers
+    object.subscribers.decorate(context: {subscriber_index: true})
+  end
+
+  def subscribing
+    object.subscribing.decorate(context: {subscribed_index: true})
+  end
+
+  def blocking
+    object.blocking.decorate(context: {block_index: true})
   end
 
   def relations
@@ -169,7 +200,7 @@ class UserDecorator < Draper::Decorator
 
   def wall
     posts = Post.all.where(destination_id: id)
-    posts.decorate.as_json
+    posts.decorate
   end
 
   def groups

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_16_110402) do
+ActiveRecord::Schema.define(version: 2018_11_21_095648) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -22,12 +22,14 @@ ActiveRecord::Schema.define(version: 2018_11_16_110402) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "block_users", force: :cascade do |t|
-    t.bigint "user_id"
+  create_table "black_lists", force: :cascade do |t|
+    t.integer "blocker_id"
     t.integer "blocked_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["user_id"], name: "index_block_users_on_user_id"
+    t.index ["blocked_id"], name: "index_black_lists_on_blocked_id"
+    t.index ["blocker_id", "blocked_id"], name: "index_black_lists_on_blocker_id_and_blocked_id", unique: true
+    t.index ["blocker_id"], name: "index_black_lists_on_blocker_id"
   end
 
   create_table "notes", force: :cascade do |t|
@@ -74,5 +76,4 @@ ActiveRecord::Schema.define(version: 2018_11_16_110402) do
     t.index ["first_name", "last_name"], name: "index_users_on_first_name_and_last_name"
   end
 
-  add_foreign_key "block_users", "users"
 end

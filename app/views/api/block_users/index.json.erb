@@ -1,1 +1,1 @@
-<%= sanitize collection.decorate.to_json %>
+<%= sanitize collection.decorate(context: {block_index: true}).to_json %>

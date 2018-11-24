@@ -21,7 +21,7 @@ class Api::SubscribingsController < BaseController
     @user = current_user.subscribers.find(params[:subscriber_id]) if params[:subscriber_id]
     @user = current_user.subscribers.find(params[:id]) if params[:id]
     @user = User.find(params[:user_id]) if params[:user_id]
-    @user = current_user.subscribers.find(params[:friend_id]) if params[:friend_id]
+    @user = FriendFinder.new(current_user).find(params[:friend_id]) if params[:friend_id]
     @user
   end
 

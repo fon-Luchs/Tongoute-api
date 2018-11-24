@@ -3,13 +3,13 @@ require 'rails_helper'
 RSpec.describe 'GetProfileFriendResource', type: :request do
   let(:user) { create(:user, :with_auth_token) }
 
-  let(:sub_user)      { create(:user, first_name: 'Jeffrey', last_name: 'Lebowski') }
+  let(:friend_user)      { create(:user, first_name: 'Jeffrey', last_name: 'Lebowski', id: 1) }
 
-  let(:subscriber)    { create(:subscriber, user: user, subscriber_id: sub_user.id ) }
+  let(:subscribe)        { create(:relationship, subscribed_id: user.id, subscriber_id: friend_user.id) }
 
-  let!(:friend) { create(:friend, user: user, friend_id: subscriber.subscriber_id, id: 1) }
+  let(:friend_subscribe) { create(:relationship, subscribed_id: friend_user.id, subscriber_id: user.id) }
 
-  let!(:user_friend) { friend.user }
+  let!(:user_friend) { friend_user }
 
   let(:value) { user.auth_token.value }
 

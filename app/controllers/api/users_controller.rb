@@ -12,6 +12,6 @@ class Api::UsersController < BaseController
   end
 
   def banned?
-    BlockUser.exists?(user_id: params[:id], blocked_id: current_user.id)
+    BlackList.exists?(blocker_id: params[:id], blocked_id: current_user.id)
   end
 end

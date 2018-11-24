@@ -6,7 +6,7 @@ RSpec.describe FriendFinder do
   subject { FriendFinder.new(user) }
 
   describe '#find' do
-    it { expect(subject.find(user)).to eq(user) }
+    it { expect(subject.find(user)).to eq(nil) }
   end
 
   describe '#all' do

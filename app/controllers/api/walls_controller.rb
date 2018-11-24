@@ -25,7 +25,7 @@ class Api::WallsController < BaseController
   end
 
   def banned?
-    if BlockUser.exists?(user_id: destination_id, blocked_id: current_user.id)
+    if BlackList.exists?(blocker_id: destination_id, blocked_id: current_user.id)
       head 403
     end
   end

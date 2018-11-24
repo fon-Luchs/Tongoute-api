@@ -1,15 +1,15 @@
 require 'rails_helper'
 
 RSpec.describe 'GetUserFriendResource', type: :request do
-  let(:user) { create(:user, :with_auth_token) }
+  let(:user) { create(:user, :with_auth_token, id: 1) }
 
-  let(:sub_user)      { create(:user, first_name: 'Jeffrey', last_name: 'Lebowski') }
+  let(:friend_user)      { create(:user, first_name: 'Jeffrey', last_name: 'Lebowski', id: 2) }
 
-  let(:subscriber)    { create(:subscriber, user: user, subscriber_id: sub_user.id ) }
+  let(:subscribe)        { create(:relationship, subscribed_id: user.id, subscriber_id: friend_user.id) }
 
-  let!(:friend) { create(:friend, user: user, friend_id: subscriber.subscriber_id, id: 1) }
+  let(:friend_subscribe) { create(:relationship, subscribed_id: friend_user.id, subscriber_id: user.id) }
 
-  let!(:user_friend) { friend.user }
+  let!(:user_friend) { friend_user }
 
   let(:value) { user.auth_token.value }
 
@@ -62,10 +62,8 @@ RSpec.describe 'GetUserFriendResource', type: :request do
     }
   end
 
-  before { create(:friend, resource_params.merge(user: user)) }
-
   context do
-    before { post '/api/user/1/friends/1', params: params.to_json, headers: headers }
+    before { get '/api/users/1/friends/2', params: {}, headers: headers }
 
     it('returns notes') { expect(JSON.parse(response.body)).to eq resource_response }
 
@@ -75,7 +73,7 @@ RSpec.describe 'GetUserFriendResource', type: :request do
   context 'Unauthorized' do
     let(:value) { SecureRandom.uuid }
 
-    before { post '/api/user/1/friends/1', params: params.to_json, headers: headers }
+    before { get '/api/users/1/friends/2', params: {}, headers: headers }
 
     it('returns HTTP Status Code 401') { expect(response).to have_http_status :unauthorized }
   end

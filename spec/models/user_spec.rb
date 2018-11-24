@@ -31,9 +31,21 @@ RSpec.describe User, type: :model do
 
   it { should have_many(:documents) }
 
-  it { should have_many(:relation).dependent(:destroy) }
-
   it { should have_many(:active_relationship).class_name('Relationship') }
+
+  it { should have_many(:pasive_relationship).class_name('Relationship') }
+
+  it { should have_many(:subscribing) }
+
+  it { should have_many(:subscribers) }
+
+  it { should have_many(:active_block).class_name('BlackList') }
+
+  it { should have_many(:pasive_block).class_name('BlackList') }
+
+  it { should have_many(:blocking) }
+
+  it { should have_many(:blockers) }
 
   it { should validate_presence_of(:first_name) }
 
