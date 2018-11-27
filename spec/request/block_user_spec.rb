@@ -17,7 +17,7 @@ RSpec.describe 'BlockUser', type: :request do
     }
   end
 
-  before { create(:block_user, user: user, blocked_id: b_user.id) }
+  before { create(:black_list, blocker: b_user, blocked: user) }
 
   context do
     before { post '/api/users/1/block', params: {}, headers: headers }

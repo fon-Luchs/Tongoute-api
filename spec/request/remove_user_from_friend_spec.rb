@@ -5,13 +5,13 @@ RSpec.describe 'RemoveUserFromFriend', type: :request do
 
   let(:sub_user)      { create(:user, first_name: 'Jeffrey', last_name: 'Lebowski') }
 
-  let(:subscriber)    { create(:subscriber, user: user, subscriber_id: sub_user.id ) }
+  let(:subscriber)    { create(:relationship, subscribed: sub_user, subscriber: user ) }
+
+  let(:subscribing)    { create(:relationship, subscribed: user, subscriber: sub_user) }
   
   let(:value) { user.auth_token.value }
 
   let(:headers) { { 'Authorization' => "Token token=#{value}", 'Content-type' => 'application/json', 'Accept' => 'application/json' } }
-
-  let!(:friend) { create(:friend, user: user, friend_id: subscriber.subscriber_id) }
 
   describe 'User#remove.json' do
 

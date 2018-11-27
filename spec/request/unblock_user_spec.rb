@@ -5,7 +5,7 @@ RSpec.describe 'UnblockUser', type: :request do
 
   let(:b_user) { create(:user, id: 1) }
 
-  let(:ban) { create(:block_user, user: user, blocked_id: b_user.id) }
+  let!(:block) { create(:black_list, blocker: user, blocked: b_user) }
 
   let(:value) { user.auth_token.value }
 

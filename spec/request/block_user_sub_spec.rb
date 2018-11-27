@@ -5,7 +5,7 @@ RSpec.describe 'BlockUserSub', type: :request do
 
   let(:b_user) { create(:user, id: 1) }
 
-  let(:subscribers) { create(:subscribers, user: user, subscriber_id: b_user.id, id: 1) }
+  let(:subscribers) { create(:relationship, subscriber: b_user, subscribed: user) }
 
   let(:value) { user.auth_token.value }
 
@@ -19,7 +19,7 @@ RSpec.describe 'BlockUserSub', type: :request do
     }
   end
 
-  before { create(:block_user, user: user, blocked_id: b_user.id) }
+  before { create(:black_list, blocker: b_user, blocked: user) }
 
   context do
     before { post '/api/profile/subscribers/1/block', params: {}, headers: headers }
