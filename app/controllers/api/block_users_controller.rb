@@ -32,4 +32,8 @@ class Api::BlockUsersController < BaseController
     @b_user = current_user.blocking.find(params[:id]) if params[:id]
     @b_user
   end
+
+  def banned?
+    BlackList.exists?(blocker_id: params[:id], blocked_id: current_user.id)
+  end
 end

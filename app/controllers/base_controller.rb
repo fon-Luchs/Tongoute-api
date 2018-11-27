@@ -1,4 +1,6 @@
 class BaseController < ApplicationController
+  helper_method :banned?
+
   def create
     render :errors unless resource.save
   end

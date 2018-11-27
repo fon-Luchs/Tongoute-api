@@ -34,4 +34,8 @@ class Api::SubscribingsController < BaseController
   def friend_request?
     current_user.subscribers.include?(set_user)
   end
+
+  def banned?
+    BlackList.exists?(blocker_id: params[:id], blocked_id: current_user.id)
+  end
 end

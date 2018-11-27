@@ -19,4 +19,8 @@ class Api::FriendsController < BaseController
       @user = current_user
     end
   end
+
+  def banned?
+    BlackList.exists?(blocker_id: params[:id], blocked_id: current_user.id)
+  end
 end
