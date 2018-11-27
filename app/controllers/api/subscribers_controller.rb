@@ -7,7 +7,7 @@ class Api::SubscribersController < BaseController
   end
 
   def collection
-    @subscribers = current_user.subscribers
+    @subscribers = set_user.subscribers
   end
 
   def set_user

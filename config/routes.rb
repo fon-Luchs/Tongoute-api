@@ -23,7 +23,11 @@ Rails.application.routes.draw do
         delete 'unblock', to: 'block_users#destroy'
       end
 
-      resources :subscribings, only: [:create, :show, :index]
+      resources :subscribings, only: [:create, :show, :index] do
+
+        delete 'remove', to: 'subscribings#destroy'
+
+      end
 
       get 'blacklist', to: 'block_users#index'
 

@@ -70,11 +70,7 @@ RSpec.describe Api::BlockUsersController, type: :controller do
   describe '#destroy.json' do
     let(:params) { { user_id: block_user.id, id: ban.id } }
 
-    before do
-      expect(user).to receive_message_chain(:blocking, :find)
-        .with(no_args).with(ban.id.to_s)
-        .and_return(block_user)
-    end
+    before { expect(subject).to receive(:destroy) }
 
     before { merge_header }
 

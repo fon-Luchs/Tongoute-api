@@ -6,6 +6,7 @@ class UserDecorator < Draper::Decorator
   decorates_associations :subscribers
   decorates_associations :subscribing
   decorates_associations :blocking
+  decorates_associations :blockers
 
   def as_json(*args)
     if context[:show]

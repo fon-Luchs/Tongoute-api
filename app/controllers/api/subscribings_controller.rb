@@ -2,6 +2,11 @@ class Api::SubscribingsController < BaseController
   before_action :build_resource, only: :create
   helper_method :friend_request?
 
+  def destroy
+    current_user.subscribing.delete set_user
+    head 204 unless current_user.subscribing.include? set_user
+  end
+
   private
 
   def build_resource
@@ -19,7 +24,8 @@ class Api::SubscribingsController < BaseController
   def set_user
     return @user if @user
     @user = current_user.subscribers.find(params[:subscriber_id]) if params[:subscriber_id]
-    @user = current_user.subscribers.find(params[:id]) if params[:id]
+    @user = current_user.subscribing.find(params[:subscribing_id]) if params[:subscribing_id]
+    @user = current_user.subscribing.find(params[:id]) if params[:id]
     @user = User.find(params[:user_id]) if params[:user_id]
     @user = FriendFinder.new(current_user).find(params[:friend_id]) if params[:friend_id]
     @user
