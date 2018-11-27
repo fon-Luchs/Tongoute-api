@@ -9,11 +9,11 @@ RSpec.describe 'BlockUserFriend', type: :request do
 
   let(:headers) { { 'Authorization' => "Token token=#{value}", 'Content-type' => 'application/json', 'Accept' => 'application/json' } }
 
-  let(:resource_params) { attributes_for(:block_user) }
+  let(:resource_params) { attributes_for(:black_list) }
 
   let(:params) { { block_user: resource_params } }
 
-  let(:block) { BlockUser.last }
+  let(:block) { ActiveBlock.last }
 
   let(:resource_response) do
     {
@@ -23,7 +23,7 @@ RSpec.describe 'BlockUserFriend', type: :request do
     }
   end
 
-  before { create(:block_user, resource_params.merge(user: user, blocked_id: b_user.id)) }
+  before { create(:black_list, resource_params.merge(blocker_id: b_user.id, blocked_id: user.id)) }
 
   context do
     before { post '/api/users/1/block', params: {}, headers: headers }

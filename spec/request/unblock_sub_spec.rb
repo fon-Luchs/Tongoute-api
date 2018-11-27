@@ -5,9 +5,9 @@ RSpec.describe 'UnblockSub', type: :request do
 
   let(:b_user) { create(:user) }
 
-  let(:subscribers) { create(:subscribers, user: user, subscriber_id: b_user.id, id: 1) }
+  let(:subscribers) { create(:relationship, subscribed: user, subscriber: b_user) }
 
-  let(:ban) { create(:block_user, user: user, blocked_id: b_user.id) }
+  let!(:block) { create(:black_list, blocker: user, blocked: b_user) }
 
   let(:value) { user.auth_token.value }
 

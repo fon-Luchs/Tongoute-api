@@ -2,7 +2,11 @@ require 'rails_helper'
 
 RSpec.describe 'ProfileBlackList', type: :request do
   let(:user) { create(:user, :with_auth_token) }
+  
+  let(:b_user)      { create(:user, first_name: 'Jeffrey', last_name: 'Lebowski') }
 
+  let(:ban)        { create(:black_list, blocked: b_user, blocker: user) }
+  
   let(:b_user) { create(:user, id: 1) }
 
   let(:ban)    { create(:block_user, user: user, blocked_id: b_user) }
@@ -12,7 +16,7 @@ RSpec.describe 'ProfileBlackList', type: :request do
   let(:headers) { { 'Authorization' => "Token token=#{value}", 'Content-type' => 'application/json', 'Accept' => 'application/json' } }
 
   let(:resource_response) do
-    BlockUser.all.map do |ban|
+    BlackList.all.map do |ban|
       b_user = User.find(ban.blocked_id)
       {
         "id" => b_user.id,

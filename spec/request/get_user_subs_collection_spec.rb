@@ -1,21 +1,22 @@
 require 'rails_helper'
 
 RSpec.describe 'GetUserSubsCollection', type: :request do
-  let(:user) { create(:user, :with_auth_token) }
+  let(:user) { create(:user, :with_auth_token, id: 1) }
 
-  let(:sub_user) { create(:user, id: 1) }
+  let(:sub_user) { create(:user) }
 
-  let!(:subscriber) { create(:relationship, subscriber_id: sub_user.id, subscribed_id: user.id, id: 1) }
+  let!(:subscriber) { create(:relationship, subscriber_id: sub_user.id, subscribed_id: user.id) }
 
   let(:value) { user.auth_token.value }
 
   let(:headers) { { 'Authorization' => "Token token=#{value}", 'Content-type' => 'application/json', 'Accept' => 'application/json' } }
 
   let(:resource_response) do
-    user.subscribers.all.map do |s|
+    Relationship.all.map do |s|
+      s_user = User.find(s.subscriber_id)
       {
-        "id" => s.id,
-        "name" => "#{s.first_name} #{s.last_name}",
+        "id" => s_user.id,
+        "name" => "#{s_user.first_name} #{s_user.last_name}",
         "status" => 'Subscriber'
       }
     end
