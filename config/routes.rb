@@ -34,6 +34,8 @@ Rails.application.routes.draw do
       get 'blacklist/:id', to: 'block_users#show'
 
       delete 'blacklist/:id/unblock', to: 'block_users#destroy'
+
+      resources :conversations, only: :show
     end
 
     resources :users, only: [:show, :index] do

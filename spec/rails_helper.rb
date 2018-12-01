@@ -48,6 +48,7 @@ RSpec.configure do |config|
   config.include Authentication
   config.include Permitter
   config.include FactoryBot::Syntax::Methods
+  config.include HeaderMerger
 end
 ActiveRecord::Migration.maintain_test_schema!
 

@@ -32,6 +32,8 @@ class User < ApplicationRecord
 
   has_many :blockers, through: :pasive_block, source: :blocker
 
+  has_many :conversations, foreign_key: 'sender_id'
+
   validates :email, presence: true, uniqueness: { case_sensitive: false }
 
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }
