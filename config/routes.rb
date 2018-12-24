@@ -23,7 +23,7 @@ Rails.application.routes.draw do
         delete 'unblock', to: 'block_users#destroy'
       end
 
-      resources :subscribings, only: [:create, :show, :index] do
+      resources :subscribings, only: [:show, :index] do
 
         delete 'remove', to: 'subscribings#destroy'
 
@@ -35,7 +35,7 @@ Rails.application.routes.draw do
 
       delete 'blacklist/:id/unblock', to: 'block_users#destroy'
 
-      resources :conversations, only: :show
+      resources :conversations, only: [:show, :index]
     end
 
     resources :users, only: [:show, :index] do
@@ -50,6 +50,8 @@ Rails.application.routes.draw do
       delete 'unblock', to: 'block_users#destroy'
 
       resources :friends, only: [:show, :index]
+
+      resources :conversations, only: [:create, :show]
 
       delete 'remove', to: 'subscribings#destroy'
     end

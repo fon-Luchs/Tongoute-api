@@ -346,3 +346,30 @@ curl -H 'Accept: application/json' \
      -H 'Authorization: Token token="XXXX-YYYY-ZZZZ"' \
      -X DELETE localhost:3000/api/profile/friends/:id/unblock
 ```
+
+### Conversation create
+
+```
+curl -H 'Accept: application/json' \
+     -H 'Authorization: Token token="G6DJMyibaQm2uYWj2Piq88iv"' \
+     -X POST localhost:3000/api/users/:user_id/conversations
+
+```
+
+### Conversation index
+
+```
+curl -H 'Accept: application/json' \
+     -H 'Authorization: Token token="G6DJMyibaQm2uYWj2Piq88iv"' \
+      localhost:3000/api/users/:user_id/conversations
+
+```
+
+### Conversation show
+
+```
+curl -H 'Accept: application/json' \
+     -H 'Authorization: Token token="G6DJMyibaQm2uYWj2Piq88iv"' \
+      localhost:3000/api/users/:user_id/conversations/:id
+
+```

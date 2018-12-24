@@ -32,7 +32,13 @@ class User < ApplicationRecord
 
   has_many :blockers, through: :pasive_block, source: :blocker
 
-  has_many :conversations, foreign_key: 'sender_id'
+  has_many :active_conversations, foreign_key: :sender_id, class_name: 'Conversation'
+
+  has_many :pasive_conversations, foreign_key: :recipient_id, class_name: 'Conversation'
+
+  has_many :user_chats
+
+  has_many :chats, through: :user_chats
 
   validates :email, presence: true, uniqueness: { case_sensitive: false }
 

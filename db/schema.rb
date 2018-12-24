@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_29_171202) do
+ActiveRecord::Schema.define(version: 2018_12_01_180340) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -30,6 +30,13 @@ ActiveRecord::Schema.define(version: 2018_11_29_171202) do
     t.index ["blocked_id"], name: "index_black_lists_on_blocked_id"
     t.index ["blocker_id", "blocked_id"], name: "index_black_lists_on_blocker_id_and_blocked_id", unique: true
     t.index ["blocker_id"], name: "index_black_lists_on_blocker_id"
+  end
+
+  create_table "chats", force: :cascade do |t|
+    t.string "name"
+    t.integer "creator_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "conversations", force: :cascade do |t|
@@ -67,6 +74,16 @@ ActiveRecord::Schema.define(version: 2018_11_29_171202) do
     t.index ["subscribed_id"], name: "index_relationships_on_subscribed_id"
     t.index ["subscriber_id", "subscribed_id"], name: "index_relationships_on_subscriber_id_and_subscribed_id", unique: true
     t.index ["subscriber_id"], name: "index_relationships_on_subscriber_id"
+  end
+
+  create_table "user_chats", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "chat_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["chat_id"], name: "index_user_chats_on_chat_id"
+    t.index ["user_id", "chat_id"], name: "index_user_chats_on_user_id_and_chat_id", unique: true
+    t.index ["user_id"], name: "index_user_chats_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
