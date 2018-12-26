@@ -1,6 +1,8 @@
 class Api::ConversationsController < BaseController
   before_action :build_resource, only: :create
-  
+
+  helper_method :current_id
+
   private
 
   def build_resource
@@ -8,7 +10,7 @@ class Api::ConversationsController < BaseController
   end
 
   def resource
-    @conversation ||= conversations.find(conversation_params)
+    @conversation ||= conversations.find(params[:id])
   end
 
   def collection
@@ -23,13 +25,11 @@ class Api::ConversationsController < BaseController
     @conversations = UserConversations.new(current_user).get_conversations
   end
 
-  def conversation_params
-    return @params if @params
-    @params = params[:id] if params[:id]
-    @params
-  end
-
   def banned?
     BlackList.exists?(blocker_id: params[:user_id], blocked_id: current_user.id)
+  end
+
+  def current_id
+    current_user.id
   end
 end

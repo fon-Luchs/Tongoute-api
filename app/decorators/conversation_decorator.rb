@@ -4,10 +4,10 @@ class ConversationDecorator < Draper::Decorator
   decorates_associations :recipient
 
   def as_json(*args)
-    if context[:conversations_show]
+    if context[:user_id] == sender.id
       {
         id: object.id,
-        name: 'Migel Castoras',
+        name: recipient.name,
         messages: [
           {
             name: 'Rudolf Gess',
@@ -20,25 +20,30 @@ class ConversationDecorator < Draper::Decorator
           }
         ]
       }
+    elsif context[:user_id] == recipient.id
+        {
+          id: object.id,
+          name: sender.name,
+          messages: [
+            {
+              name: 'Rudolf Gess',
+              message: 'Hi dude!'
+            },
+    
+            {
+              name: 'Rudolf Gess',
+              message: 'Heey?'
+            }
+          ]
+        }
     elsif context[:conversations_index]
-      conversations
+      {
+        id: object.id,
+        name: context[:user_id] == sender.id ? sender.name : recipient.name
+      }
     elsif context[:blocked]
       blocked
     end
-  end
-
-  def conversations
-    [
-      {
-        name: 'Astor Piyazola',
-        last_message: 'lool'
-      },
-
-      {
-        name: 'Bon Piranno',
-        last_message: 'lool'
-      }
-    ]
   end
 
   def blocked
