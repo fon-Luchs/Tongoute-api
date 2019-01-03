@@ -351,7 +351,7 @@ curl -H 'Accept: application/json' \
 
 ```
 curl -H 'Accept: application/json' \
-     -H 'Authorization: Token token="G6DJMyibaQm2uYWj2Piq88iv"' \
+     -H 'Authorization: Token token="XXXX-YYYY-ZZZZ"' \
      -X POST localhost:3000/api/users/:user_id/conversations
 
 ```
@@ -360,7 +360,7 @@ curl -H 'Accept: application/json' \
 
 ```
 curl -H 'Accept: application/json' \
-     -H 'Authorization: Token token="G6DJMyibaQm2uYWj2Piq88iv"' \
+     -H 'Authorization: Token token="XXXX-YYYY-ZZZZ"' \
       localhost:3000/api/users/:user_id/conversations
 
 ```
@@ -369,7 +369,49 @@ curl -H 'Accept: application/json' \
 
 ```
 curl -H 'Accept: application/json' \
-     -H 'Authorization: Token token="G6DJMyibaQm2uYWj2Piq88iv"' \
+     -H 'Authorization: Token token="XXXX-YYYY-ZZZZ"' \
       localhost:3000/api/users/:user_id/conversations/:id
 
+```
+
+### Chat create
+
+```
+curl -H 'Accept: application/json' \
+     -H 'Authorization: Token token="XXXX-YYYY-ZZZZ"' \
+     -d 'chat[name]=Tongoute' \
+     localhost:3000/api/profile/chats/
+```
+
+### Chat update
+
+```
+curl -H 'Accept: application/json' \
+     -H 'Authorization: Token token="XXXX-YYYY-ZZZZ"' \
+     -d 'chat[name]=Tongoute' \
+     localhost:3000/api/profile/chats/:id
+```
+
+### Chat index
+
+```
+curl -H 'Accept: application/json' \
+     -H 'Authorization: Token token="XXXX-YYYY-ZZZZ"' \
+     localhost:3000/api/profile/chats/
+```
+
+### Chat show
+
+```
+curl -H 'Accept: application/json' \
+     -H 'Authorization: Token token="XXXX-YYYY-ZZZZ"' \
+     localhost:3000/api/profile/chats/:id
+```
+
+### Chat destroy
+
+```
+curl -H 'Accept: application/json' \
+     -H 'Authorization: Token token="XXXX-YYYY-ZZZZ"' \
+     -X DELETE localhost:3000/api/profile/chats/:id
 ```

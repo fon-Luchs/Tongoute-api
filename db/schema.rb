@@ -81,7 +81,7 @@ ActiveRecord::Schema.define(version: 2019_01_02_110205) do
     t.integer "chat_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.integer "role", default: 0
+    t.integer "role", default: 2
     t.index ["chat_id"], name: "index_user_chats_on_chat_id"
     t.index ["user_id", "chat_id"], name: "index_user_chats_on_user_id_and_chat_id", unique: true
     t.index ["user_id"], name: "index_user_chats_on_user_id"

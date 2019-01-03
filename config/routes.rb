@@ -36,6 +36,8 @@ Rails.application.routes.draw do
       delete 'blacklist/:id/unblock', to: 'block_users#destroy'
 
       resources :conversations, only: [:show, :index]
+
+      resources :chats
     end
 
     resources :users, only: [:show, :index] do
