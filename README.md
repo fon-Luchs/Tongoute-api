@@ -389,7 +389,7 @@ curl -H 'Accept: application/json' \
 curl -H 'Accept: application/json' \
      -H 'Authorization: Token token="XXXX-YYYY-ZZZZ"' \
      -d 'chat[name]=Tongoute' \
-     localhost:3000/api/profile/chats/:id
+     -X PUT localhost:3000/api/profile/chats/:id
 ```
 
 ### Chat index

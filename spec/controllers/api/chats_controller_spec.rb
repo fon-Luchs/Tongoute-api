@@ -44,10 +44,11 @@ RSpec.describe Api::ChatsController, type: :controller do
   before { sign_in user }
 
   describe 'create#json' do
+    before { expect(Chat).to receive(:new).with(permitted_params).and_return(chat) }
+
     before do
-      expect(user).to receive_message_chain(:chats, :new)
-        .with(no_args).with(permitted_params)
-        .and_return(chat)
+      expect(chat).to receive_message_chain(:users, :<<)
+        .with(no_args).with(user).and_return(chat)
     end
 
     context 'success' do
