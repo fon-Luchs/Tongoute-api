@@ -37,7 +37,13 @@ Rails.application.routes.draw do
 
       resources :conversations, only: [:show, :index]
 
-      resources :chats
+      resources :chats do
+        post   'join',  to: 'user_chats#create'
+
+        delete 'leave', to: 'user_chats#destroy'
+
+        patch 'update', to: 'user_chats#update'
+      end
     end
 
     resources :users, only: [:show, :index] do
