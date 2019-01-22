@@ -415,3 +415,19 @@ curl -H 'Accept: application/json' \
      -H 'Authorization: Token token="XXXX-YYYY-ZZZZ"' \
      -X DELETE localhost:3000/api/profile/chats/:id
 ```
+
+### Chat Join
+
+```
+curl -H 'Accept: application/json' \
+     -H 'Authorization: Token token="XXXX-YYYY-ZZZZ"' \
+     -X POST localhost:3000/api/profile/chats/:id/join
+```
+
+### Chat Leave
+
+```
+curl -H 'Accept: application/json' \
+     -H 'Authorization: Token token="XXXX-YYYY-ZZZZ"' \
+     -X POST localhost:3000/api/profile/chats/:id/leave
+```

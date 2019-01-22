@@ -25,41 +25,33 @@ RSpec.describe Api::UserChatsController, type: :controller do
     }
   end
 
-  let(:params) do
-    {
-      user_chat:
-      {
-        chat_id: chat.id.to_s,
-        user_id: user.id,
-        role: 0
-      }
-    }
-  end
+  let(:params) { { user_chat: { chat_id: chat.id.to_s, user_id: user.id, role: 0 } } }
 
   let(:permitted_params) { permit_params! params, :user_chat }
 
   before { sign_in user }
 
   describe '#create#json' do
+    let(:params)  { { chat_id: chat.id, user_chat: { chat_id: chat.id.to_s, user_id: user.id, role: 0 } } }
 
-    before { expect(UserChat).to receive(:new).with(permitted_params).and_return(user_chat) }
+    before { expect(UserChat).to receive(:find_or_initialize_by).with(permitted_params).and_return(user_chat) }
 
     context 'success' do
-      before { expect(chat).to receive(:save).and_return(true) }
+      before{ expect(user_chat).to receive(:save).and_return(true) }
 
-      before { merge_headers request_headers }
+      before{ merge_headers request_headers }
 
-      before { post :create, params: {chat_id: chat.id}.merge(params), format: :json }
+      before { post :create, params: params, format: :json }
 
       it { should render_template :create }
     end
 
     context 'fail' do
-      before { expect(chat).to receive(:save).and_return(false) }
+      before{ expect(user_chat).to receive(:save).and_return(false) }
 
-      before { merge_headers request_headers }
+      before{ merge_headers request_headers }
 
-      before { post :create, params: {chat_id: chat.id}.merge(params), format: :json }
+      before { post :create, params: params, format: :json }
 
       it { should render_template :errors }
     end
