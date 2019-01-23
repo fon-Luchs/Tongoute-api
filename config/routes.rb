@@ -35,7 +35,9 @@ Rails.application.routes.draw do
 
       delete 'blacklist/:id/unblock', to: 'block_users#destroy'
 
-      resources :conversations, only: [:show, :index]
+      resources :conversations, only: [:show, :index] do
+        resources :messages, only: [:create, :update]
+      end
 
       resources :chats do
         post   'join',  to: 'user_chats#create'
@@ -43,6 +45,8 @@ Rails.application.routes.draw do
         delete 'leave', to: 'user_chats#destroy'
 
         patch 'update', to: 'user_chats#update'
+
+        resources :messages, only: [:create, :update]
       end
     end
 

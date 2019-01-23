@@ -40,6 +40,8 @@ class User < ApplicationRecord
 
   has_many :chats, through: :user_chats
 
+  has_many :messages
+
   validates :email, presence: true, uniqueness: { case_sensitive: false }
 
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }
