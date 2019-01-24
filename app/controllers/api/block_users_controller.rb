@@ -25,7 +25,6 @@ class Api::BlockUsersController < BaseController
   end
 
   def set_user
-    @b_user if @b_user
     @b_user = current_user.subscribers.find(params[:subscriber_id]) if params[:subscriber_id]
     @b_user = FriendFinder.new(current_user).find(params[:friend_id]) if params[:friend_id]
     @b_user = User.find(params[:user_id]) if params[:user_id]

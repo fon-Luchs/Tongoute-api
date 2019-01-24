@@ -7,6 +7,10 @@ RSpec.describe ChatDecorator do
 
   let(:chat)  { create(:chat, creator_id: user.id) }
 
+  let(:message) { create(:message, messageable_type: chat.class.name, messageable_id: chat.id, user_id: user.id, text: 'LOL') }
+
+  let(:decorated_message) { message.decorate.as_json }
+
   before { chat.users << users }
 
   describe 'create#json' do
@@ -20,7 +24,7 @@ RSpec.describe ChatDecorator do
 
     its([:users])  { should eq users }
 
-    its([:messages]) { should eq [{context: 'lol'}] }
+    its([:messages]) { should eq [decorated_message] }
   end
 
   describe 'index#json' do
@@ -32,7 +36,7 @@ RSpec.describe ChatDecorator do
 
     its([:author]) { should eq author }
 
-    its([:last_message]) { should eq 'LOL' }
+    its([:last_message]) { should eq decorated_message }
   end
 
   def author

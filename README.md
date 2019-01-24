@@ -431,3 +431,31 @@ curl -H 'Accept: application/json' \
      -H 'Authorization: Token token="XXXX-YYYY-ZZZZ"' \
      -X POST localhost:3000/api/profile/chats/:id/leave
 ```
+
+### Create Message
+
+```
+curl -H 'Accept: application/json' \
+     -H 'Authorization: Token token="XXXX-YYYY-ZZZZ"' \
+     -d 'message[text]=Hello Tongoute' \
+     localhost:3000/api/profile/chats/:chat_id/messages
+
+curl -H 'Accept: application/json' \
+     -H 'Authorization: Token token="XXXX-YYYY-ZZZZ"' \
+     -d 'message[text]=Hi)' \
+      localhost:3000/api/profile/conversations/:conversation_id/messages
+```
+
+### Update Message
+
+```
+curl -H 'Accept: application/json' \
+     -H 'Authorization: Token token="XXXX-YYYY-ZZZZ"' \
+     -d 'message[text]=Hello Tongoute' \
+     -X PATCH localhost:3000/api/profile/chats/:chat_id/messages/:id
+
+curl -H 'Accept: application/json' \
+     -H 'Authorization: Token token="XXXX-YYYY-ZZZZ"' \
+     -d 'message[text]=Hi)' \
+     -X PATCH localhost:3000/api/profile/conversations/:conversation_id/messages/:id
+```

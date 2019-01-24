@@ -6,6 +6,11 @@ RSpec.describe ConversationDecorator do
   let(:recipient) { create(:user) }
 
   let(:conversations) { create(:conversation, sender: sender, recipient: recipient) }
+
+  let(:message) { create(:message, messageable_type: conversations.class.name, messageable_id: conversations.id, user_id: sender.id, text: 'LOL') }
+
+  let(:decorated_message) { message.decorate.as_json }
+
   describe 'show#json' do
     subject { conversations.decorate(context: {user_id: sender.id}).as_json }
 
@@ -13,7 +18,7 @@ RSpec.describe ConversationDecorator do
 
     its([:name]) { should eq "#{recipient.first_name} #{recipient.last_name}" }
 
-    its([:messages]) { should eq messages }
+    its([:messages]) { should eq [decorated_message] }
   end
 
   describe 'index#json' do

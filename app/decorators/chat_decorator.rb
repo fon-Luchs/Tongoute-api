@@ -3,6 +3,8 @@ class ChatDecorator < Draper::Decorator
 
   decorates_associations :users
 
+  decorates_associations :messages
+
   def as_json(*args)
     if context[:chat_index]
       {
@@ -12,7 +14,7 @@ class ChatDecorator < Draper::Decorator
           id: author.id,
           name: author.name
         },
-        last_message: 'LOL'
+        last_message: object.messages.decorate.last.as_json
       }
 
     elsif context[:chat_show]
@@ -24,7 +26,7 @@ class ChatDecorator < Draper::Decorator
           name: author.name
         },
         users: users,
-        messages: [{context: 'lol'}]
+        messages: object.messages.order(created_at: :asc).decorate.as_json
       }
     end
   end
