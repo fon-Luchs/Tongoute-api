@@ -6,6 +6,7 @@ class Api::ChatsController < BaseController
   def build_resource
     @chat = Chat.new(resource_params.merge(creator_id: current_user.id))
     @chat.users << current_user
+    binding.pry
     @chat
   end
 

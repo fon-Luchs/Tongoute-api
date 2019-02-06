@@ -7,26 +7,7 @@ class User < ApplicationRecord
 
   has_many :posts
 
-  has_many :active_relationship, class_name: 'Relationship',
-                                 foreign_key: 'subscriber_id',
-                                 dependent: :destroy
-
-  
-  has_many :pasive_relationship, class_name: 'Relationship',
-                                 foreign_key: 'subscribed_id',
-                                 dependent: :destroy
-
-  has_many :subscribing, through: :active_relationship, source: :subscribed
-
-  has_many :subscribers, through: :pasive_relationship, source: :subscriber
-
-  has_many :active_block, class_name: 'BlackList',
-                        foreign_key:'blocker_id',
-                        dependent: :destroy
-  
-  has_many :pasive_block, class_name: 'BlackList',
-                        foreign_key:'blocked_id',
-                        dependent: :destroy
+  has_many :relations, foreign_key: 'relating_id', class_name: 'Relation'
 
   has_many :blocking, through: :active_block, source: :blocked
 

@@ -2,11 +2,6 @@ class UserDecorator < Draper::Decorator
   delegate_all
 
   decorates_associations :notes
-  decorates_associations :block_users
-  decorates_associations :subscribers
-  decorates_associations :subscribing
-  decorates_associations :blocking
-  decorates_associations :blockers
 
   def as_json(*args)
     if context[:show]
@@ -56,102 +51,7 @@ class UserDecorator < Draper::Decorator
       name: name,
       status: 'This user add you in black list'
     }
-
-    elsif context[:block_show]
-    {
-      id: object.id,
-      name: name,
-      status: 'Banned',
-      information: info,
-      wall: wall,
-      groups: groups.count,
-      friends: friends.count,
-      subscribers: subscribers.count,
-      videos: videos.count,
-      photos: photos.count,
-      audios: audios.count
-    }
-
-  elsif context[:block_index]
-    {
-      id: object.id,
-      name: name,
-      status: 'Banned'
-    }
-
-    elsif context[:subscriber_show]
-    {
-      id: object.id,
-      name: name,
-      status: 'Subscriber',
-      information: info,
-      wall: wall,
-      groups: groups.count,
-      friends: friends.count,
-      subscribers: subscribers.count,
-      videos: videos.count,
-      photos: photos.count,
-      audios: audios.count
-    }
-
-    elsif context[:subscriber_index]
-    {  
-      id: object.id,
-      name: name,
-      status: 'Subscriber'
-    }
-
-    elsif context[:subscribed_show]
-    {
-      id: object.id,
-      name: name,
-      status: 'Subscribed',
-      information: info,
-      wall: wall,
-      groups: groups.count,
-      friends: friends.count,
-      subscribers: subscribers.count,
-      videos: videos.count,
-      photos: photos.count,
-      audios: audios.count
-    }
-
-    elsif context[:subscribed_index]
-    {
-      id: object.id,
-      name: name,
-      status: 'Subscribed'
-    }
-
-    elsif context[:friend_show]
-    {
-      id: object.id,
-      name: name,
-      status: 'Friend',
-      information: info,
-      wall: wall,
-      groups: groups.count,
-      friends: friends.count,
-      subscribers: subscribers.count,
-      videos: videos.count,
-      photos: photos.count,
-      audios: audios.count
-    }
-
-    elsif context[:friend_index]
-    {
-      id: object.id,
-      name: name,
-      status: 'Friend'
-    }
-
-    else
-    {
-      id: object.id,
-      name: name,
-      status: 'Subscriber'
-    }  
-    end  
+    end
   end
 
   def name
@@ -172,23 +72,6 @@ class UserDecorator < Draper::Decorator
 
   def location
     [country, locate].join(', ')
-  end
-
-  def friends
-    friends = FriendFinder.new(self).all
-    friends.decorate(context: {friend_index: true})
-  end
-
-  def subscribers
-    object.subscribers.decorate(context: {subscriber_index: true})
-  end
-
-  def subscribing
-    object.subscribing.decorate(context: {subscribed_index: true})
-  end
-
-  def blocking
-    object.blocking.decorate(context: {block_index: true})
   end
 
   def relations

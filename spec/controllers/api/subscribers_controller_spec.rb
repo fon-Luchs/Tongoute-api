@@ -17,7 +17,7 @@ RSpec.describe Api::SubscribersController, type: :controller do
 
   let(:value) { user.auth_token.value }
   
-  let(:relationship) { create(:relationship, subscriber_id: sub_user.id, subscribed_id: user.id, id: 1) }
+  let(:relationship) { create(:relation, relating_id: user.id, related_id: user.id, id: 1) }
 
   before { sign_in user }
 

@@ -1,13 +1,15 @@
 class Api::SubscribersController < BaseController
 
+  include Relatable
+
   private
 
   def resource
-    @subscriber = set_user.subscribers.find(params[:id])
+    @subscriber = relation_finder(set_user).subscribers.find(related_id: params[:id])
   end
 
   def collection
-    @subscribers = set_user.subscribers
+    @subscribers = relation_finder(set_user).subscribers
   end
 
   def set_user
@@ -17,6 +19,6 @@ class Api::SubscribersController < BaseController
   end
 
   def banned?
-    BlackList.exists?(blocker_id: params[:id], blocked_id: current_user.id)
+    current_reletions.block_users.exists?( related_id: params[:id] )
   end
 end

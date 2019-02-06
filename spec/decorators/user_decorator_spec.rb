@@ -39,44 +39,7 @@ RSpec.describe UserDecorator do
     end
   end
 
-  let(:user)          { create(:user, first_name: 'Jarry', last_name: 'Smith') }
-
-  let(:sub_user)      { create(:user, first_name: 'Jeffrey', last_name: 'Lebowski') }
-
-  let(:relationship) { create(:relationship, subscriber_id: sub_user.id, subscribed_id: user.id) }
-
-  describe 'Subscriber#show.json' do
-    subject { sub_user.decorate(context: {subscriber_show: true}).as_json }
-
-    its([:name]) { should eq 'Jeffrey Lebowski' }
-
-    its([:status]) { should eq 'Subscriber' }
-
-    its([:information]) { should eq profile_information sub_user }
-
-    its([:wall]) { should eq [] }
-
-    its([:groups])  { should eq 2 }
-
-    its([:friends]) { should eq 0 }
-
-    its([:subscribers]) { should eq 0 }
-
-    its([:videos]) { should eq 1 }
-
-    its([:photos]) { should eq 1 }
-
-    its([:audios]) { should eq 1 }
-  end
-
-  describe 'Subscriber#index.json' do
-    subject { sub_user.decorate(context: {subscriber_index: true}).as_json }
-
-    its([:name]) { should eq 'Jeffrey Lebowski' }
-
-    its([:status]) { should eq 'Subscriber' }
-  end
-
+  
   let(:subscribe) { create(:relationship, subscriber_id: user.id, subscribed_id: sub_user.id) }
 
   describe 'Subscribed#show.json' do

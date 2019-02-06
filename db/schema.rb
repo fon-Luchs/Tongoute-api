@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_01_22_101530) do
+ActiveRecord::Schema.define(version: 2019_02_04_153959) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -20,16 +20,6 @@ ActiveRecord::Schema.define(version: 2019_01_22_101530) do
     t.integer "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-  end
-
-  create_table "black_lists", force: :cascade do |t|
-    t.integer "blocker_id"
-    t.integer "blocked_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["blocked_id"], name: "index_black_lists_on_blocked_id"
-    t.index ["blocker_id", "blocked_id"], name: "index_black_lists_on_blocker_id_and_blocked_id", unique: true
-    t.index ["blocker_id"], name: "index_black_lists_on_blocker_id"
   end
 
   create_table "chats", force: :cascade do |t|
@@ -78,14 +68,13 @@ ActiveRecord::Schema.define(version: 2019_01_22_101530) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "relationships", force: :cascade do |t|
-    t.integer "subscriber_id"
-    t.integer "subscribed_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["subscribed_id"], name: "index_relationships_on_subscribed_id"
-    t.index ["subscriber_id", "subscribed_id"], name: "index_relationships_on_subscriber_id_and_subscribed_id", unique: true
-    t.index ["subscriber_id"], name: "index_relationships_on_subscriber_id"
+  create_table "relations", force: :cascade do |t|
+    t.integer "related_id"
+    t.integer "relating_id"
+    t.integer "state", default: 0
+    t.index ["related_id", "relating_id"], name: "index_relations_on_related_id_and_relating_id", unique: true
+    t.index ["related_id"], name: "index_relations_on_related_id"
+    t.index ["relating_id"], name: "index_relations_on_relating_id"
   end
 
   create_table "user_chats", force: :cascade do |t|
