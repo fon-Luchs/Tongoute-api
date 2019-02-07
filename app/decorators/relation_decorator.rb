@@ -4,6 +4,7 @@ class RelationDecorator < Draper::Decorator
 
   delegate_all
   decorates_associations :initiator
+  decorates_associations :initiated
 
   def as_json(*args)
     if context[:block_show]
@@ -53,22 +54,22 @@ class RelationDecorator < Draper::Decorator
       elsif context[:subscribed_show]
       {
         id: object.id,
-        name: name,
+        name: initiated.name,
         status: 'Subscribed',
-        information: info,
-        wall: wall,
-        groups: groups.count,
+        information: initiated.info,
+        wall: initiated.wall,
+        groups: initiated.groups.count,
         friends: friends.count,
         subscribers: subscribers.count,
-        videos: videos.count,
-        photos: photos.count,
-        audios: audios.count
+        videos: initiated.videos.count,
+        photos: initiated.photos.count,
+        audios: initiated.audios.count
       }
 
       elsif context[:subscribed_index]
       {
         id: object.id,
-        name: name,
+        name: initiated.name,
         status: 'Subscribed'
       }
 

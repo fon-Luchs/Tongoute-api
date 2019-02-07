@@ -12,8 +12,8 @@ class UserDecorator < Draper::Decorator
       information: info,
       wall: wall,
       groups: groups,
-      friends: friends,
-      subscribers: subscribers,
+      friends: relations.friends,
+      subscribers: relations.subscribers,
       videos: videos,
       photos: photos,
       audios: audios,
@@ -34,10 +34,10 @@ class UserDecorator < Draper::Decorator
       information: info,
       wall: wall,
       groups: groups,
-      friends: friends,
-      subscribers: subscribers,
-      subscribing: subscribing,
-      black_list: blocking,
+      friends: relations.friends.decorate(context: {friend_index: true}).as_json,
+      subscribers: relations.subscribers.decorate(context: {friend_index: true}).as_json,
+      subscribings: relations.subscribings.decorate(context: {friend_index: true}).as_json,
+      black_list: relations.blocked_users.decorate(context: {friend_index: true}).as_json,
       videos: videos,
       photos: photos,
       audios: audios,
@@ -54,6 +54,10 @@ class UserDecorator < Draper::Decorator
     end
   end
 
+  def relations
+    RelationsTypeGetter.new(object)
+  end
+
   def name
     [first_name, last_name].join(' ')
   end
@@ -63,7 +67,7 @@ class UserDecorator < Draper::Decorator
       email: object.email,
       number: object.number,
       bday: object.date,
-      relation: [relations, relations],
+      relation: [relation, relation],
       address: object.address,
       location: location,
       about_self: object.about
@@ -74,7 +78,7 @@ class UserDecorator < Draper::Decorator
     [country, locate].join(', ')
   end
 
-  def relations
+  def relation
     {
       id: 23,
       name: 'Jarry Smith',

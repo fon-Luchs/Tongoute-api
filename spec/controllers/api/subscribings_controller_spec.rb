@@ -21,7 +21,7 @@ RSpec.describe Api::SubscribingsController, type: :controller do
 
   let(:value) { user.auth_token.value }
   
-  let(:subscribe) { create(:relationship, subscriber_id: user.id, subscribed_id: sub_user.id) }
+  let(:subscribe) { create(:relation, relating_id: user.id, related_id: sub_user.id) }
 
   before { sign_in user }
 
@@ -38,8 +38,8 @@ RSpec.describe Api::SubscribingsController, type: :controller do
   before { expect(User).to receive(:find).with(sub_user.id.to_s).and_return(sub_user) }
 
   before do
-    expect(user).to receive_message_chain(:active_relationship, :new)
-      .with(no_args).with(subscribed_id: sub_user.id)
+    expect(user).to receive_message_chain(:relations, :new)
+      .with(no_args).with(related_id: sub_user.id)
       .and_return(subscribe)
   end
 
