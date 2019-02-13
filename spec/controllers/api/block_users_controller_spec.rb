@@ -27,7 +27,7 @@ RSpec.describe Api::BlockUsersController, type: :controller do
 
   let(:block_user) { create(:user) }
 
-  let(:ban) { create(:black_list, blocker_id: user.id, blocked_id: block_user.id) }
+  let(:ban) { create(:relation, relating_id: user.id, related_id: block_user.id) }
 
   before { sign_in user }
 
@@ -39,10 +39,14 @@ RSpec.describe Api::BlockUsersController, type: :controller do
     }
   end
 
+  # let(:params) { { relation: { relating_id: user.id, related_id: block_user.id, state: 2 } } }
+
+  # let(:permitted_params) { permit_params! params, :relation }
+
   describe '#create.json' do
     before do
-      expect(user).to receive_message_chain(:active_block, :new)
-        .with(no_args).with( { blocked_id: block_user.id } )
+      expect(user).to receive_message_chain(:relations, :new)
+        .with(no_args).with({ related_id: block_user.id, state: 2 })
         .and_return(ban)
     end
 

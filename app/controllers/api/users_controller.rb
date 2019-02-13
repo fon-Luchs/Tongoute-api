@@ -1,4 +1,7 @@
 class Api::UsersController < BaseController
+  
+  include Relatable
+  
   helper_method :banned?
 
   private
@@ -12,6 +15,6 @@ class Api::UsersController < BaseController
   end
 
   def banned?
-    BlackList.exists?(blocker_id: params[:id], blocked_id: current_user.id)
+    relation_finder(current_user).block_users.exists?( related_id: params[:id] )
   end
 end

@@ -1,4 +1,7 @@
 class Api::WallsController < BaseController
+
+  include Relatable
+
   before_action :build_resource, only: :create
 
   private
@@ -25,7 +28,7 @@ class Api::WallsController < BaseController
   end
 
   def banned?
-    if BlackList.exists?(blocker_id: destination_id, blocked_id: current_user.id)
+    if relation_finder(current_user).blocked_users.exists?( related_id: destination_id )
       head 403
     end
   end

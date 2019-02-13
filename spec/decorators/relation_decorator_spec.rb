@@ -74,6 +74,40 @@ RSpec.describe RelationDecorator do
     its([:status]) { should eq 'Subscribed' }
   end
 
+  let(:ban) { create(:relation, relating_id: user.id, related_id: sub_user.id, state: 2) }
+
+  describe 'Block#show.json' do
+    subject      { ban.decorate(context: {block_show: true}).as_json }
+
+    its([:name]) { should eq 'Jeffrey Lebowski' }
+
+    its([:status])      { should eq 'Banned' }
+
+    its([:information]) { should eq profile_information(sub_user) }
+
+    its([:wall])    { should eq [] }
+
+    its([:groups])  { should eq 2 }
+
+    its([:friends]) { should eq 0 }
+
+    its([:subscribers]) { should eq 0 }
+
+    its([:videos])  { should eq 1 }
+
+    its([:photos])  { should eq 1 }
+
+    its([:audios])  { should eq 1 }
+  end
+
+  describe 'Block#index.json' do
+    subject      { ban.decorate(context: {block_index: true}).as_json }
+
+    its([:name]) { should eq 'Jeffrey Lebowski' }
+
+    its([:status])      { should eq 'Banned' }
+  end
+
   def profile_information(profile)
     {
       email: profile.email,

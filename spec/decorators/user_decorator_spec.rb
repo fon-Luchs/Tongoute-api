@@ -88,42 +88,7 @@ RSpec.describe UserDecorator do
     xit([:status]) { should eq 'This user add you in black list' }
   end
 
-  describe 'Block#show.json' do
-    let(:b_user) { create(:user, first_name: 'Jeffrey', last_name: 'Lebowski') }
-
-    subject      { b_user.decorate(context: {block_show: true}).as_json }
-
-    xit([:name]) { should eq 'Jeffrey Lebowski' }
-
-    xit([:status])      { should eq 'Banned' }
-
-    xit([:information]) { should eq profile_information(b_user) }
-
-    xit([:wall])    { should eq [] }
-
-    xit([:groups])  { should eq 2 }
-
-    xit([:friends]) { should eq 0 }
-
-    xit([:subscribers]) { should eq b_user.subscribers.count }
-
-    xit([:videos])  { should eq 1 }
-
-    xit([:photos])  { should eq 1 }
-
-    xit([:audios])  { should eq 1 }
-  end
-
-  describe 'Block#index.json' do
-    let(:b_user) { create(:user, first_name: 'Jeffrey', last_name: 'Lebowski') }
-
-    subject      { b_user.decorate(context: {block_index: true}).as_json }
-
-    xit([:name]) { should eq 'Jeffrey Lebowski' }
-
-    xit([:status])      { should eq 'Banned' }
-  end
-
+  
   def groups
     [
       {
