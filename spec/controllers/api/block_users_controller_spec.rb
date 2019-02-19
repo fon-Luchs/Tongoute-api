@@ -12,13 +12,9 @@ RSpec.describe Api::BlockUsersController, type: :controller do
 
     it { should route(:delete, '/api/profile/blacklist/1/unblock').to(action: :destroy, controller: 'api/block_users', id: 1) }
 
-    it { should route(:post, '/api/profile/subscribers/1/block').to(action: :create, controller: 'api/block_users', subscriber_id: 1) }
+    it { should route(:patch, '/api/profile/subscribers/1/block').to(action: :update, controller: 'api/block_users', subscriber_id: 1) }
 
-    it { should route(:delete, '/api/profile/subscribers/1/unblock').to(action: :destroy, controller: 'api/block_users', subscriber_id: 1) }
-
-    it { should route(:post, '/api/profile/friends/1/block').to(action: :create, controller: 'api/block_users', friend_id: 1) }
-
-    it { should route(:delete, '/api/profile/friends/1/unblock').to(action: :destroy, controller: 'api/block_users', friend_id: 1) }
+    it { should route(:patch, '/api/profile/friends/1/block').to(action: :update, controller: 'api/block_users', friend_id: 1) }
   end
 
   let(:user) { create(:user, :with_auth_token) }

@@ -8,11 +8,7 @@ RSpec.describe Api::SubscribingsController, type: :controller do
 
     it { should route(:post, '/api/users/1/request').to(action: :create, controller: 'api/subscribings', user_id: 1) }
 
-    it { should route(:post, '/api/profile/subscribers/1/request').to(action: :create, controller: 'api/subscribings', subscriber_id: 1) }
-
-    it { should route(:delete, '/api/users/1/remove').to(action: :destroy, controller: 'api/subscribings', user_id: 1) }
-
-    it { should route(:delete, '/api/profile/friends/1/remove').to(action: :destroy, controller: 'api/subscribings', friend_id: 1) }
+    it { should route(:delete, '/api/profile/friends/1/remove').to(action: :destroy, controller: 'api/friends', friend_id: 1) }
   end
   
   let(:user) { create(:user, :with_auth_token, :with_information) }

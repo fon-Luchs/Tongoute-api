@@ -37,6 +37,6 @@ class RelationsTypeGetter
   end
 
   def banneds_collection
-    Relation.banned.where(related_id: user.id)
+    Relation.banned.where(relating_id: user.id)
   end
 end

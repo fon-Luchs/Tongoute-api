@@ -35,9 +35,9 @@ class UserDecorator < Draper::Decorator
       wall: wall,
       groups: groups,
       friends: relations.friends.decorate(context: {friend_index: true}).as_json,
-      subscribers: relations.subscribers.decorate(context: {friend_index: true}).as_json,
-      subscribings: relations.subscribings.decorate(context: {friend_index: true}).as_json,
-      black_list: relations.blocked_users.decorate(context: {friend_index: true}).as_json,
+      subscribers: relations.subscribers.decorate(context: {subscriber_index: true}).as_json,
+      subscribings: relations.subscribings.decorate(context: {subscribed_index: true}).as_json,
+      black_list: relations.blocked_users.decorate(context: {block_index: true}).as_json,
       videos: videos,
       photos: photos,
       audios: audios,
@@ -88,7 +88,7 @@ class UserDecorator < Draper::Decorator
 
   def wall
     posts = Post.all.where(destination_id: id)
-    posts.decorate
+    posts.decorate.as_json
   end
 
   def groups

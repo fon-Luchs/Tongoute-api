@@ -8,26 +8,20 @@ Rails.application.routes.draw do
       resources :walls
 
       resources :friends, only: [:show, :index] do
-        delete 'remove', to: 'subscribings#destroy'
+        delete 'remove', to: 'friends#destroy'
 
-        post 'block', to: 'block_users#create'
-
-        delete 'unblock', to: 'block_users#destroy'
+        patch 'block', to: 'block_users#update'
       end
       
       resources :subscribers, only: [:index, :show] do
-        post 'request', to: 'subscribings#create'
-
-        post 'block', to: 'block_users#create'
-
-        delete 'unblock', to: 'block_users#destroy'
+        patch 'block', to: 'block_users#update'
       end
 
       resources :subscribings, only: [:show, :index] do
-
         delete 'remove', to: 'subscribings#destroy'
-
       end
+
+      post  'subscribers/:subscriber_id/accept', to: 'friends#create'
 
       get 'blacklist', to: 'block_users#index'
 
@@ -55,17 +49,15 @@ Rails.application.routes.draw do
 
       resources :subscribers, only: [:show, :index]
       
-      post 'request', to: 'subscribings#create'
-
       post 'block', to: 'block_users#create'
-
-      delete 'unblock', to: 'block_users#destroy'
 
       resources :friends, only: [:show, :index]
 
       resources :conversations, only: [:create, :show]
 
-      delete 'remove', to: 'subscribings#destroy'
+      delete 'unblock', to: 'block_users#destroy'
+
+      post   'request', to: 'subscribings#create'
     end
   end
 end

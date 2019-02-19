@@ -4,42 +4,43 @@ class Api::SubscribingsController < BaseController
   
   before_action :build_resource, only: :create
   
-  helper_method :friend_request?
+  helper_method :friend_request?, :current_id
 
   def destroy
-    relation_finder(current_user).subscribing.delete set_user
-    head 204 unless current_user.subscribing.include? set_user
+    relation_finder(current_user).subscribings.delete get_object
+    head 204 unless relation_finder(current_user).subscribers.exists?(relating_id: get_object.id)
   end
 
   private
 
   def build_resource
-    @subscribed = current_user.relations.new(related_id: set_user.id)
+    @subscribed = current_user.relations.new(related_id: get_object.id)
   end
 
   def resource
-    @subscribed ||= relation_finder(set_user)
+    @subscribed ||= get_object
   end
 
   def collection
-    @subscibing = relation_finder(current_user).subscribing
+    @subscibing = relation_finder(current_user).subscribings
   end
 
-  def set_user
-    return @user if @user
-    @user = relation_finder(current_user).subscribers.find(params[:subscriber_id]) if params[:subscriber_id]
-    @user = relation_finder(current_user).subscribing.find(params[:subscribing_id]) if params[:subscribing_id]
-    @user = relation_finder(current_user).subscribing.find(params[:id]) if params[:id]
+  def get_object
+    @user = relation_finder(current_user).subscribings.find(params[:subscribing_id]) if params[:subscribing_id]
+    @user = relation_finder(current_user).subscribings.find(params[:id]) if params[:id]
     @user = User.find(params[:user_id]) if params[:user_id]
-    @user = relation_finder(current_user).friends.find(params[:friend_id]) if params[:friend_id]
     @user
   end
 
   def friend_request?
-    current_user.subscribers.include?(set_user)
+    relation_finder(current_user).friends.exists?(relating_id: get_object.id)
   end
 
   def banned?
-    current_reletions.block_users.exists?( related_id: params[:id] )
+    relation_finder(set_user).blocked_users.exists?( related_id: params[:id] )
+  end
+
+  def current_id
+    current_user.id
   end
 end

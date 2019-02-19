@@ -12,7 +12,7 @@ class Api::BlockUsersController < BaseController
   private
 
   def build_resource
-    @block_user = current_user.relations.new(resource_params)
+    @block_user = current_user.relations.new(build_params)
   end
 
   def resource
@@ -23,9 +23,13 @@ class Api::BlockUsersController < BaseController
     @block_users = relation_finder(current_user).blocked_users
   end
 
+  def build_params
+    # params.require(:relation).permit().merge(state: 2, related_id: set_user.id)
+    { related_id: set_user.id }.merge(resource_params)
+  end
+
   def resource_params
-    # params.require(:relation).permit(:state).merge(related_id: set_user.id)
-    { related_id: set_user.id, state: 2 }
+    { state: 2 }
   end
 
   def set_user
@@ -37,6 +41,6 @@ class Api::BlockUsersController < BaseController
   end
 
   def banned?
-    current_reletions.block_users.exists?( related_id: params[:id] )
+    relation_finder(current_user).blocked_users.exists?( related_id: params[:id] )
   end
 end

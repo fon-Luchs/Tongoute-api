@@ -299,6 +299,15 @@ curl -H 'Accept: application/json' \
       localhost:3000/api/profile/friends
 ```
 
+### Friend Delete
+
+```
+curl -H 'Accept: application/json' \
+     -H 'Authorization: Token token="XXXX-YYYY-ZZZZ"' \
+     -X DELETE localhost:3000/api/profile/friends/:id/remove
+
+```
+
 ### Add User in black list
 
 ```

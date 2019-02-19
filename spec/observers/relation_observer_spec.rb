@@ -45,7 +45,7 @@ RSpec.describe RelationObserver, type: :observer do
     it { expect{subject.after_create(relation)}.to_not raise_error }
   end
 
-  let(:relation) { create(:relation, related_id: sub_user.id, relating_id: user.id, state: 1, state: 1) }
+  let(:relation) { create(:relation, related_id: sub_user.id, relating_id: user.id, state: 1) }
 
   let(:inverse_relation) { create(:relation, relating_id: sub_user.id, related_id: user.id, state: 1) }
 

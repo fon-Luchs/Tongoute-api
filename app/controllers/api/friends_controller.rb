@@ -2,16 +2,12 @@ class Api::FriendsController < BaseController
   
   include Relatable
   
-  before_action :build_resource, only: :create
+  helper_method :current_id
 
   private
 
-  def build_resource
-    @friend = current_user.relations.new(resource_params)
-  end
-
   def resource
-    @friend ||= relation_finder(set_user).friends.find(params[:id])
+    @friend = set_resource
   end
 
   def collection
@@ -19,18 +15,19 @@ class Api::FriendsController < BaseController
   end
 
   def set_user
-    if params[:user_id]
-      @user = User.find(params[:user_id])
-    else
-      @user = current_user
-    end
+    params[:user_id] ? User.find(params[:user_id]) : current_user
   end
 
-  def resource_params
-    { related_id: set_user.id }
+  def set_resource
+    relation_finder(set_user).friends.find(params[:id]) if params[:id]
+    relation_finder(set_user).friends.find(params[:friend_id]) if params[:friend_id]
   end
 
   def banned?
-    relation_finder(set_user).block_users.exists?( related_id: params[:user_id] )
+    relation_finder(set_user).blocked_users.exists?( related_id: params[:user_id] )
+  end
+
+  def current_id
+    current_user.id
   end
 end

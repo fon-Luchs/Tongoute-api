@@ -45,47 +45,14 @@ RSpec.describe UserDecorator do
     end
   end
 
-  describe 'Friend#show.json' do
-    subject { sub_user.decorate(context: {friend_show: true}).as_json }
-
-    xit([:name]) { should eq 'Jeffrey Lebowski' }
-
-    xit([:status]) { should eq 'Friend' }
-
-    xit([:information]) { should eq profile_information sub_user }
-
-    xit([:wall]) { should eq [] }
-
-    xit([:groups])  { should eq 2 }
-
-    xit([:friends]) { should eq 0 }
-
-    xit([:subscribers]) { should eq sub_user.subscribers.count }
-
-    xit([:videos]) { should eq 1 }
-
-    xit([:photos]) { should eq 1 }
-
-    xit([:audios]) { should eq 1 }
-  end
-
-  describe 'Friend#index.json' do
-    subject { sub_user.decorate(context: {friend_show: true}).as_json }
-
-    xit([:name]) { should eq 'Jeffrey Lebowski' }
-
-    xit([:status]) { should eq 'Friend' }
-
-  end
-
   describe '#blocked.json' do
     let(:user) { create(:user, first_name: 'Jarry', last_name: 'Smith') }
 
     subject { user.decorate(context: {blocked: true}).as_json }
 
-    xit([:name])   { should eq 'Jarry Smith' }
+    its([:name])   { should eq 'Jarry Smith' }
 
-    xit([:status]) { should eq 'This user add you in black list' }
+    its([:status]) { should eq 'This user add you in black list' }
   end
 
   
