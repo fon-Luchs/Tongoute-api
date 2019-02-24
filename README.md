@@ -221,10 +221,6 @@ curl -H 'Accept: application/json' \
 curl -H 'Accept: application/json' \
      -H 'Authorization: Token token="XXXX-YYYY-ZZZZ"' \
       localhost:3000/api/profile/subscribers/:id
-
-curl -H 'Accept: application/json' \
-     -H 'Authorization: Token token="XXXX-YYYY-ZZZZ"' \
-      localhost:3000/api/users/:id/subscribers/:id
 ```
 
 ### Subscriber Index
@@ -263,13 +259,17 @@ curl -H 'Accept: application/json' \
      -X POST localhost:3000/api/users/:id/request
 ```
 
-### Friend create
+### Subscribed delete
 
 ```
 curl -H 'Accept: application/json' \
      -H 'Authorization: Token token="XXXX-YYYY-ZZZZ"' \
-     -X POST localhost:3000/api/users/:id/accept
+     -X DELETE localhost:3000/api/profile/subscribings/:id/remove
+```
 
+### Friend create
+
+```
 curl -H 'Accept: application/json' \
      -H 'Authorization: Token token="XXXX-YYYY-ZZZZ"' \
      -X POST localhost:3000/api/profile/subscribings/:id/accept
@@ -308,20 +308,20 @@ curl -H 'Accept: application/json' \
 
 ```
 
-### Add User in black list
+### Black List Create
 
 ```
 curl -H 'Accept: application/json' \
      -H 'Authorization: Token token="XXXX-YYYY-ZZZZ"' \
      -X POST localhost:3000/api/users/:id/block
+```
 
+### Black List Update
+
+```
 curl -H 'Accept: application/json' \
      -H 'Authorization: Token token="XXXX-YYYY-ZZZZ"' \
-     -X POST localhost:3000/api/profile/subscribers/:id/block
-
-curl -H 'Accept: application/json' \
-     -H 'Authorization: Token token="XXXX-YYYY-ZZZZ"' \
-     -X POST localhost:3000/api/profile/friends/:id/block
+     -X PATCH localhost:3000/api/profile/friends/:id/block
 ```
 
 ### Black List Index
@@ -332,7 +332,7 @@ curl -H 'Accept: application/json' \
       localhost:3000/api/profile/blacklist/
 ```
 
-### User Show in black list
+### Black List Show
 
 ```
 curl -H 'Accept: application/json' \

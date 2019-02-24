@@ -149,7 +149,7 @@ class RelationDecorator < Draper::Decorator
   end
 
   def current_friend
-    context[:friend_id] == initiator.id ? initiator : initiated
+    context[:friend_id] == initiator.id ? initiated : initiator
   end
 
 end

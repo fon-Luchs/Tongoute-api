@@ -5,7 +5,13 @@ class Relation < ApplicationRecord
 
   enum state: { subscriber: 0, friend: 1, banned: 2 } 
 
-  validates :related_id, uniqueness: { scope: :relating_id }
+  validates :related_id, uniqueness: { scope: :initiator}
 
-  # validates :related_id, uniqueness: { scope: :related_id }
+  validate :disallow_self_referential_relation
+
+  def disallow_self_referential_relation
+    if related_id == relating_id
+      errors.add(:related_id, 'cannot refer back to the author')
+    end
+  end
 end

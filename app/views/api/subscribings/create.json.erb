@@ -1,6 +1,8 @@
 <%=
   if friend_request?
     sanitize resource.decorate(context: {friend_show: true, friend_id: current_id}).to_json
+  elsif banned?
+    sanitize resource.decorate(context: {blocked: true}).to_json
   else
     sanitize resource.decorate(context: {subscribed_show: true}).to_json
   end

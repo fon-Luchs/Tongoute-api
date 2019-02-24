@@ -8,7 +8,7 @@ class Api::SubscribingsController < BaseController
 
   def destroy
     relation_finder(current_user).subscribings.delete get_object
-    head 204 unless relation_finder(current_user).subscribers.exists?(relating_id: get_object.id)
+    head 204 unless relation_finder(current_user).subscribings.exists?(id: get_object.id)
   end
 
   private
@@ -33,11 +33,13 @@ class Api::SubscribingsController < BaseController
   end
 
   def friend_request?
-    relation_finder(current_user).friends.exists?(relating_id: get_object.id)
+    relation_finder(current_user).friends.exists?(id: get_object.id)
   end
 
   def banned?
-    relation_finder(set_user).blocked_users.exists?( related_id: params[:id] )
+    ban = relation_finder(get_object).blocked_users.exists?(related_id: current_user.id) if params[:user_id]
+    ban = relation_finder(User.find(get_object.initiated.id)).blocked_users.exists?(related_id: current_user.id) if params[:id]
+    ban
   end
 
   def current_id

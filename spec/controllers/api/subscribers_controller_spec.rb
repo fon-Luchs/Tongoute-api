@@ -7,8 +7,6 @@ RSpec.describe Api::SubscribersController, type: :controller do
     it { should route(:get, '/api/users/1/subscribers').to(action: :index, controller: 'api/subscribers', user_id: 1) }
 
     it { should route(:get, '/api/profile/subscribers/1').to(action: :show, controller: 'api/subscribers', id: 1) }
-
-    it { should route(:get, '/api/users/1/subscribers/1').to(action: :show, controller: 'api/subscribers', user_id: 1, id: 1) }
   end
   
   let(:user) { create(:user, :with_auth_token, :with_information) }

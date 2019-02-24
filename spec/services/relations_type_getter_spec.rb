@@ -16,7 +16,7 @@ RSpec.describe RelationsTypeGetter do
   describe '#friends' do
     let(:fr_us) { create(:user) }
 
-    let(:fr) { create(:relation, relating_id: fr_us.id, related_id: user.id, state: 1) }
+    let(:fr) { create(:relation, relating_id: user.id, related_id: fr_us.id, state: 1) }
 
     its(:friends) { should eq [fr] }
   end
@@ -32,7 +32,7 @@ RSpec.describe RelationsTypeGetter do
   describe '#blocked_users' do
     let(:bl_us) { create(:user) }
 
-    let(:bl) { create(:relation, relating_id: bl_us.id, related_id: user.id, state: 2) }
+    let(:bl) { create(:relation, relating_id: user.id, related_id: bl_us.id, state: 2) }
 
     its(:blocked_users) { should eq [bl] }
   end

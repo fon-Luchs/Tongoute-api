@@ -80,4 +80,35 @@ RSpec.describe RelationObserver, type: :observer do
 
     it { expect{subject.after_destroy(relation)}.to_not raise_error }
   end
+
+  describe '#after_update' do
+    before do
+      expect(relation).to receive_message_chain(:state, :==)
+        .with(no_args).with('banned').and_return(true)
+    end
+
+    before do
+      expect(Relation).to receive(:friend) do
+        double.tap do |r|
+          expect(r).to receive(:exists?)
+            .with(relating_id: relation.related_id, related_id: relation.relating_id)
+            .and_return(true)
+        end
+      end
+    end
+
+    before do
+      expect(Relation).to receive(:friend) do
+        double.tap do |r|
+          expect(r).to receive(:find_by!)
+            .with(relating_id: relation.related_id, related_id: relation.relating_id)
+            .and_return(inverse_relation)
+        end
+      end
+    end
+
+    before { expect(inverse_relation).to receive(:update).with(state: 0).and_return(true) }
+
+    it { expect{subject.after_update(relation)}.to_not raise_error }
+  end
 end

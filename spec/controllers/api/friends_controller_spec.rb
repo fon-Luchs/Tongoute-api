@@ -15,13 +15,13 @@ RSpec.describe Api::FriendsController, type: :controller do
     it { should route(:delete, '/api/profile/friends/1/remove').to(action: :destroy, controller: 'api/friends', friend_id: 1) }
   end
 
-  let(:user)        { create(:user, :with_auth_token, id: 2) }
+  let(:user)        { create(:user, :with_auth_token, id: 1) }
 
-  let(:friend_user) { create(:user, id: 1) }
+  let(:friend_user) { create(:user, id: 2) }
 
-  let(:subscribe)        { create(:relationship, subscribed_id: user.id, subscriber_id: friend_user.id) }
+  let(:subscribe)        { create(:relation, related_id: user.id, relating_id: friend_user.id, id: 11) }
 
-  let(:friend_subscribe) { create(:relationship, subscribed_id: friend_user.id, subscriber_id: user.id) }
+  let(:friend_subscribe) { create(:relation, related_id: friend_user.id, relating_id: user.id, id: 22) }
 
   let(:value)            { user.auth_token.value }
 
@@ -31,6 +31,45 @@ RSpec.describe Api::FriendsController, type: :controller do
       'Content-type' => 'application/json',
       'Accept' => 'application/json'
     }
+  end
+
+  before { sign_in user }
+
+  describe '#create.json' do
+    before do
+      expect(RelationsTypeGetter).to receive(:new).with(user) do
+        double.tap do |r|
+          expect(r).to receive_message_chain(:subscribers, :find)
+            .with(no_args).with(friend_user.id.to_s).and_return(subscribe)
+        end
+      end
+    end
+
+    before do
+      expect(user).to receive_message_chain(:relations, :new)
+        .with(no_args).with(related_id: subscribe.initiator.id)
+        .and_return(friend_subscribe)
+    end
+
+    context 'success' do
+      before { expect(friend_subscribe).to receive(:save).and_return(true) }
+
+      before { merge_headers headers }
+
+      before { post :create, params: { subscriber_id: friend_user.id }, format: :json }
+
+      it { should render_template :create }
+    end
+
+    context 'fail' do
+      before { expect(friend_subscribe).to receive(:save).and_return(false) }
+
+      before { merge_headers headers }
+
+      before { post :create, params: { subscriber_id: friend_user.id }, format: :json }
+
+      it { should render_template :errors }
+    end
   end
 
   describe '#show.json' do

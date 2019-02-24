@@ -93,7 +93,7 @@ RSpec.describe RelationDecorator do
 
     its([:status]) { should eq 'friend' }
 
-    its([:user]) { should eq user_show sub_user }
+    its([:user]) { should eq user_show user }
   end
 
   describe 'Friend#index.json' do
@@ -103,7 +103,7 @@ RSpec.describe RelationDecorator do
 
     its([:status]) { should eq 'friend' }
 
-    its([:user]) { should eq user_index sub_user }
+    its([:user]) { should eq user_index user }
   end
 
   def profile_information(profile)

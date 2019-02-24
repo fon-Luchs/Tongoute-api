@@ -8,4 +8,6 @@ class Conversation < ApplicationRecord
   validates :sender_id, presence: true
 
   validates :recipient_id, presence: true
+
+  validates :sender, uniqueness: { scope: :recipient_id }
 end

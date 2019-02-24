@@ -33,14 +33,15 @@ class Api::BlockUsersController < BaseController
   end
 
   def set_user
-    @b_user = relation_finder(current_user).subscribers.find(params[:subscriber_id]) if params[:subscriber_id]
     @b_user = relation_finder(current_user).friends.find(params[:friend_id]) if params[:friend_id]
-    @b_user = User.find(params[:user_id]) if params[:user_id]
     @b_user = relation_finder(current_user).blocked_users.find(params[:id]) if params[:id]
+    @b_user = User.find(params[:user_id]) if params[:user_id]
     @b_user
   end
 
   def banned?
-    relation_finder(current_user).blocked_users.exists?( related_id: params[:id] )
+    ban = relation_finder(set_user).blocked_users.exists?(related_id: current_user.id) if params[:user_id]
+    ban = relation_finder(User.find(resource.initiator.id)).blocked_users.exists?(related_id: current_user.id) if params[:friend_id] || params[:id]
+    ban
   end
 end

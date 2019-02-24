@@ -7,6 +7,10 @@ class RelationObserver < ActiveRecord::Observer
     build_dual_relations!(relation, 'friend') if relation.state == 'friend'
   end
 
+  def after_update(relation)
+    build_dual_relations!(relation, 'friend') if relation.state == 'banned'
+  end
+
   private
 
   def build_dual_relations!(relation, type)
@@ -17,7 +21,7 @@ class RelationObserver < ActiveRecord::Observer
   end
 
   def get_state(relation={}, type)
-    state = Relation.states.select{|k| k != 'banned' && k != type}
+    state = relation.select{|k| k != 'banned' && k != type}
     state.values.first
   end
 

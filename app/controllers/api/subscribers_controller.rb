@@ -18,6 +18,6 @@ class Api::SubscribersController < BaseController
   end
 
   def banned?
-    relation_finder(set_user).blocked_users.exists?( related_id: params[:id] )
+    relation_finder(User.find(resource.initiated.id)).blocked_users.exists?(related_id: current_user.id) if params[:id]
   end
 end

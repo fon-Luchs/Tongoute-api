@@ -7,7 +7,20 @@ RSpec.describe Relation, type: :model do
 
   it { should define_enum_for(:state) }
 
-  it { should validate_uniqueness_of(:related_id).scoped_to(:relating_id) }
+  describe "uniquness_of_relation" do
+    let(:current_user) { create(:user) }
 
-  # it { should validate_uniqueness_of(:related_id).scoped_to(:related_id) }
+    let(:another_user) { create(:user) }
+
+    context "by_table" do
+      before { current_user.relations.create! related_id: another_user.id }
+
+      it { expect { current_user.relations.create! related_id: another_user.id }.to raise_error(ActiveRecord::RecordInvalid) }
+    end
+
+    context "by_record" do
+      it { expect { current_user.relations.create! related_id: current_user.id }.to raise_error(ActiveRecord::RecordInvalid) }
+    end
+  end
+
 end

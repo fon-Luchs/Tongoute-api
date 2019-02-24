@@ -33,7 +33,7 @@ class RelationsTypeGetter
   end
 
   def friends_collection
-    Relation.friend.where("related_id = ? or relating_id = ?", user.id, user.id)
+    Relation.friend.where(relating_id: user.id)
   end
 
   def banneds_collection

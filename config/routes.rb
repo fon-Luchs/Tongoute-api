@@ -13,9 +13,7 @@ Rails.application.routes.draw do
         patch 'block', to: 'block_users#update'
       end
       
-      resources :subscribers, only: [:index, :show] do
-        patch 'block', to: 'block_users#update'
-      end
+      resources :subscribers, only: [:index, :show]
 
       resources :subscribings, only: [:show, :index] do
         delete 'remove', to: 'subscribings#destroy'
@@ -47,15 +45,13 @@ Rails.application.routes.draw do
     resources :users, only: [:show, :index] do
       resources :walls
 
-      resources :subscribers, only: [:show, :index]
+      resources :subscribers, only: [:index]
       
       post 'block', to: 'block_users#create'
 
       resources :friends, only: [:show, :index]
 
       resources :conversations, only: [:create, :show]
-
-      delete 'unblock', to: 'block_users#destroy'
 
       post   'request', to: 'subscribings#create'
     end
