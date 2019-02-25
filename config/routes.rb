@@ -49,7 +49,7 @@ Rails.application.routes.draw do
       
       post 'block', to: 'block_users#create'
 
-      resources :friends, only: [:show, :index]
+      resources :friends, only: [:index]
 
       resources :conversations, only: [:create, :show]
 

@@ -6,11 +6,6 @@ class Api::SubscribingsController < BaseController
   
   helper_method :friend_request?, :current_id
 
-  def destroy
-    relation_finder(current_user).subscribings.delete get_object
-    head 204 unless relation_finder(current_user).subscribings.exists?(id: get_object.id)
-  end
-
   private
 
   def build_resource

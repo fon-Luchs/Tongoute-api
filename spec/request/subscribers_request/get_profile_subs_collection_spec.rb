@@ -5,20 +5,21 @@ RSpec.describe 'GetProfileSubsCollection', type: :request do
 
   let(:sub_user) { create(:user, id: 1, first_name: 'Jarry') }
  
-  let!(:subscriber) { create(:relationship, subscriber_id: sub_user.id, subscribed_id: user.id, id: 1) }
+  let!(:relation) { create(:relation, relating_id: sub_user.id,  related_id: user.id, id: 1) }
 
   let(:value) { user.auth_token.value }
 
   let(:headers) { { 'Authorization' => "Token token=#{value}", 'Content-type' => 'application/json', 'Accept' => 'application/json' } }
 
   let(:resource_response) do
-    user.subscribers.all.map do |s|
-      {
-        "id" => s.id,
-        "name" => "Jarry #{s.last_name}",
-        "status" => 'Subscriber'
+    [{
+      'id' => relation.id,
+      'status' => relation.state,
+      'user' => {
+        'id' => relation.initiator.id,
+        'name' => "#{relation.initiator.first_name} #{relation.initiator.last_name}"
       }
-    end
+    }]
   end
 
   context do

@@ -1,33 +1,31 @@
 require 'rails_helper'
 
-RSpec.describe 'ProfileBlackList', type: :request do
+RSpec.describe 'GetProfileFriendCollection', type: :request do
   let(:user) { create(:user, :with_auth_token) }
-  
-  let(:b_user)      { create(:user, first_name: 'Jeffrey', last_name: 'Lebowski') }
 
-  let(:ban)        { create(:black_list, blocked: b_user, blocker: user) }
-  
-  let(:b_user) { create(:user, id: 1) }
+  let(:friend_user) { create(:user, first_name: 'Jeffrey', last_name: 'Lebowski', id: 1) }
 
-  let(:ban)    { create(:block_user, user: user, blocked_id: b_user) }
+  let(:friend)      { create(:relation, relating_id: user.id, related_id: friend_user.id, state: 1) }
 
   let(:value) { user.auth_token.value }
 
   let(:headers) { { 'Authorization' => "Token token=#{value}", 'Content-type' => 'application/json', 'Accept' => 'application/json' } }
 
   let(:resource_response) do
-    BlackList.all.map do |ban|
-      b_user = User.find(ban.blocked_id)
+    Relation.friend.map do |r|
       {
-        "id" => b_user.id,
-        "name" => "#{b_user.first_name} #{b_user.last_name}",
-        "status" => 'Blocked'
+        "id" => r.id,
+        "status" => r.state,
+        "user" => {
+          "id" => r.initiated.id,
+          "name" => "#{r.initiated.first_name} #{r.initiated.last_name}"
+        }
       }
     end
   end
 
   context do
-    before { get '/api/profile/blacklist', params: {}, headers: headers }
+    before { get '/api/profile/friends/', params: {}, headers: headers }
 
     it('returns notes') { expect(JSON.parse(response.body)).to eq resource_response }
 
@@ -37,7 +35,7 @@ RSpec.describe 'ProfileBlackList', type: :request do
   context 'Unauthorized' do
     let(:value) { SecureRandom.uuid }
 
-    before { get '/api/profile/blacklist', params: {}, headers: headers }
+    before { get '/api/profile/friends/', params: {}, headers: headers }
 
     it('returns HTTP Status Code 401') { expect(response).to have_http_status :unauthorized }
   end

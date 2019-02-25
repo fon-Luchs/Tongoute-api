@@ -1,28 +1,29 @@
 require 'rails_helper'
 
-RSpec.describe 'GetProfileSubscribeCollection', type: :request do
-  let(:user) { create(:user, :with_auth_token) }
+RSpec.describe 'ProfileBlackList', type: :request do
+  let(:user)    { create(:user, :with_auth_token) }
+  
+  let(:b_user)  { create(:user, first_name: 'Jeffrey', last_name: 'Lebowski') }
 
-  let(:sub_user) { create(:user, id: 1, first_name: 'Jarry') }
- 
-  let!(:subscriber) { create(:relationship, subscriber_id: sub_user.id, subscribed_id: user.id, id: 1) }
+  let(:ban)     { create(:relation, related_id: b_user.id, relating_id: user.id) }
 
   let(:value) { user.auth_token.value }
 
   let(:headers) { { 'Authorization' => "Token token=#{value}", 'Content-type' => 'application/json', 'Accept' => 'application/json' } }
 
   let(:resource_response) do
-    user.subscribing.all.map do |s|
+    Relation.banned.map do |ban|
+      b_user = User.find(ban.blocked_id)
       {
-        "id" => s.id,
-        "name" => "Jarry #{s.last_name}",
-        "status" => 'Subscribed'
+        "id" => b_user.id,
+        "name" => "#{b_user.first_name} #{b_user.last_name}",
+        "status" => 'Blocked'
       }
     end
   end
 
   context do
-    before { get '/api/profile/subscribings/', params: {}, headers: headers }
+    before { get '/api/profile/blacklist', params: {}, headers: headers }
 
     it('returns notes') { expect(JSON.parse(response.body)).to eq resource_response }
 
@@ -32,7 +33,7 @@ RSpec.describe 'GetProfileSubscribeCollection', type: :request do
   context 'Unauthorized' do
     let(:value) { SecureRandom.uuid }
 
-    before { get '/api/profile/subscribings/', params: {}, headers: headers }
+    before { get '/api/profile/blacklist', params: {}, headers: headers }
 
     it('returns HTTP Status Code 401') { expect(response).to have_http_status :unauthorized }
   end

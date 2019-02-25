@@ -1,26 +1,29 @@
 require 'rails_helper'
 
-RSpec.describe 'BlockUser', type: :request do
+RSpec.describe 'GetProfileSubscribeCollection', type: :request do
   let(:user) { create(:user, :with_auth_token) }
 
-  let(:b_user) { create(:user, id: 1) }
+  let(:sub_user) { create(:user, id: 1, first_name: 'Jarry') }
+ 
+  let!(:relation) { create(:relation, related_id: sub_user.id, relating_id: user.id, id: 1) }
 
   let(:value) { user.auth_token.value }
 
   let(:headers) { { 'Authorization' => "Token token=#{value}", 'Content-type' => 'application/json', 'Accept' => 'application/json' } }
 
   let(:resource_response) do
-    {
-      "id" => b_user.id,
-      "name" => "#{b_user.first_name} #{b_user.last_name}",
-      "status" => 'Blocked'
-    }
+    [{
+      'id' => relation.id,
+      'status' => 'subscribed',
+      'user' => {
+        'id' => relation.initiated.id,
+        'name' => "#{relation.initiated.first_name} #{relation.initiated.last_name}"
+      }
+    }]
   end
 
-  before { create(:black_list, blocker: b_user, blocked: user) }
-
   context do
-    before { post '/api/users/1/block', params: {}, headers: headers }
+    before { get '/api/profile/subscribings/', params: {}, headers: headers }
 
     it('returns notes') { expect(JSON.parse(response.body)).to eq resource_response }
 
@@ -30,14 +33,8 @@ RSpec.describe 'BlockUser', type: :request do
   context 'Unauthorized' do
     let(:value) { SecureRandom.uuid }
 
-    before { post '/api/users/1/block', params: {}, headers: headers }
+    before { get '/api/profile/subscribings/', params: {}, headers: headers }
 
     it('returns HTTP Status Code 401') { expect(response).to have_http_status :unauthorized }
-  end
-
-  context 'invalid params' do
-    before { post '/api/users/1/block', params: {}, headers: headers }
-
-    it('returns HTTP Status Code 422') { expect(response).to have_http_status 422 }
   end
 end
