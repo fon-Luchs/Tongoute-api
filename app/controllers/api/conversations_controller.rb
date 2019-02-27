@@ -1,4 +1,7 @@
 class Api::ConversationsController < BaseController
+  
+  include Relatable
+  
   before_action :build_resource, only: :create
 
   helper_method :current_id
@@ -26,7 +29,13 @@ class Api::ConversationsController < BaseController
   end
 
   def banned?
-    BlackList.exists?(blocker_id: params[:user_id], blocked_id: current_user.id)
+    res = relation_finder(get_interlocutor).blocked_users.exists?(related_id: current_user.id) if params[:id] || params[:user_id]
+    res
+  end
+
+  def get_interlocutor
+    id = resource.sender_id == current_id ? resource.recipient_id : resource.sender_id
+    User.find(id)
   end
 
   def current_id

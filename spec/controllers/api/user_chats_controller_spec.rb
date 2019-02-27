@@ -32,7 +32,7 @@ RSpec.describe Api::UserChatsController, type: :controller do
   before { sign_in user }
 
   describe '#create#json' do
-    let(:params)  { { chat_id: chat.id, user_chat: { chat_id: chat.id.to_s, user_id: user.id, role: 0 } } }
+    let(:params)  { { chat_id: chat.id, user_chat: { chat_id: chat.id, user_id: user.id, role: 0 } } }
 
     before { expect(UserChat).to receive(:find_or_initialize_by).with(permitted_params).and_return(user_chat) }
 
@@ -58,7 +58,7 @@ RSpec.describe Api::UserChatsController, type: :controller do
   end
 
   describe 'delete#json' do
-    let(:params) { {user_id: user.id, chat_id: chat.id.to_s} }
+    let(:params) { {user_id: user.id, chat_id: chat.id} }
 
     before { expect(UserChat).to receive(:find_by!).with(params).and_return(user_chat) }
 

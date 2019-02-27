@@ -73,7 +73,11 @@ RSpec.describe Api::MessagesController, type: :controller do
   describe 'update#json' do
     let(:params) { { chat_id: chat.id, id: message.id, message: { text: message.text } } }
 
-    before { expect(Message).to receive(:find_by!).with(user_id: user.id, messageable_id: chat.id).and_return(message) }
+    before do 
+      expect(Message).to receive(:find_by!)
+                        .with(user_id: user.id, messageable_id: chat.id, messageable_type: chat.class.name)
+                        .and_return(message)
+    end
 
     context 'success' do
       before { expect(message).to receive(:update).and_return(true) }

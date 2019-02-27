@@ -8,7 +8,7 @@ class Api::MessagesController < BaseController
   end
 
   def resource
-    @message ||= Message.find_by!(user_id: current_user.id, messageable_id: set_parent.id)
+    @message ||= Message.find_by!(user_id: current_user.id, messageable_id: set_parent.id, messageable_type: set_parent.class.name)
   end
 
   def resource_params

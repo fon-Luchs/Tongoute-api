@@ -16,6 +16,7 @@ class Api::UserChatsController < BaseController
   end
 
   def default_params
-    { chat_id: params[:chat_id], user_id: current_user.id }
+    chat = Chat.find(params[:chat_id])
+    { chat_id: chat.id, user_id: current_user.id }
   end
 end

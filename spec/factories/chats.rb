@@ -2,6 +2,6 @@ FactoryBot.define do
   factory :chat do
     name { FFaker::HipsterIpsum.word }
 
-    creator_id { user.id }
+    creator_id { nil }
   end
 end
