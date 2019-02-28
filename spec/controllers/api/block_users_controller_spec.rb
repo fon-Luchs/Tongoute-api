@@ -31,14 +31,14 @@ RSpec.describe Api::BlockUsersController, type: :controller do
     }
   end
 
-  # let(:params) { { relation: { relating_id: user.id, related_id: block_user.id, state: 2 } } }
+  let(:params) { { block_user: { related_id: block_user.id, state: 2 } } }
 
-  # let(:permitted_params) { permit_params! params, :relation }
+  let(:permitted_params) { permit_params! params, :block_user }
 
   describe '#create.json' do
     before do
       expect(user).to receive_message_chain(:relations, :new)
-        .with(no_args).with({ related_id: block_user.id, state: 2 })
+        .with(no_args).with(permitted_params)
         .and_return(ban)
     end
 

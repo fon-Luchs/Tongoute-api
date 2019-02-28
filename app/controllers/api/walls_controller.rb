@@ -28,8 +28,6 @@ class Api::WallsController < BaseController
   end
 
   def banned?
-    if relation_finder(current_user).blocked_users.exists?( related_id: destination_id )
-      head 403
-    end
+    head 403 if relation_finder(current_user).blocked_users.exists?( related_id: destination_id ) 
   end
 end

@@ -25,7 +25,7 @@ class Api::FriendsController < BaseController
   end
 
   def resource_params
-    { related_id: set_resource.initiator.id }
+    params.permit().merge(related_id: set_resource.initiator.id)
   end
 
   def set_resource

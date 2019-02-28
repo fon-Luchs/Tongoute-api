@@ -24,12 +24,11 @@ class Api::BlockUsersController < BaseController
   end
 
   def build_params
-    # params.require(:relation).permit().merge(state: 2, related_id: set_user.id)
-    { related_id: set_user.id }.merge(resource_params)
+    resource_params.merge(related_id: set_user.id)
   end
 
   def resource_params
-    { state: 2 }
+    params.permit().merge(state: 2)
   end
 
   def set_user

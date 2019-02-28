@@ -9,7 +9,7 @@ class Api::SubscribingsController < BaseController
   private
 
   def build_resource
-    @subscribed = current_user.relations.new(related_id: get_object.id)
+    @subscribed = current_user.relations.new(resource_params)
   end
 
   def resource
@@ -18,6 +18,10 @@ class Api::SubscribingsController < BaseController
 
   def collection
     @subscibing = relation_finder(current_user).subscribings
+  end
+
+  def resource_params
+    params.permit().merge(related_id: get_object.id)
   end
 
   def get_object

@@ -29,13 +29,17 @@ RSpec.describe Api::SubscribingsController, type: :controller do
     }
   end
 
+  let(:params) { { subscribing: { related_id: sub_user.id } } }
+
+  let(:permitted_params) { permit_params! params, :subscribing }
+
   describe '#create.json' do
   
   before { expect(User).to receive(:find).with(sub_user.id.to_s).and_return(sub_user) }
 
   before do
     expect(user).to receive_message_chain(:relations, :new)
-      .with(no_args).with(related_id: sub_user.id)
+      .with(no_args).with(permitted_params)
       .and_return(subscribe)
   end
 

@@ -31,6 +31,10 @@ RSpec.describe Api::FriendsController, type: :controller do
     }
   end
 
+  let(:params) { { friend: { related_id: subscribe.initiator.id } } }
+
+  let(:permitted_params) { permit_params! params, :friend }
+
   before { sign_in user }
 
   describe '#create.json' do
@@ -45,7 +49,7 @@ RSpec.describe Api::FriendsController, type: :controller do
 
     before do
       expect(user).to receive_message_chain(:relations, :new)
-        .with(no_args).with(related_id: subscribe.initiator.id)
+        .with(no_args).with(permitted_params)
         .and_return(friend_subscribe)
     end
 
