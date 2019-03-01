@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_02_04_153959) do
+ActiveRecord::Schema.define(version: 2019_03_01_143023) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -103,6 +103,15 @@ ActiveRecord::Schema.define(version: 2019_02_04_153959) do
     t.string "country"
     t.string "locate"
     t.index ["first_name", "last_name"], name: "index_users_on_first_name_and_last_name"
+  end
+
+  create_table "walls", force: :cascade do |t|
+    t.string "wallable_type"
+    t.integer "wallable_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["wallable_id"], name: "index_walls_on_wallable_id"
+    t.index ["wallable_type"], name: "index_walls_on_wallable_type"
   end
 
 end

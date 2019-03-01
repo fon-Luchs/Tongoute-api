@@ -23,6 +23,8 @@ class User < ApplicationRecord
 
   has_many :messages
 
+  has_one  :wall, as: :wallable
+
   validates :email, presence: true, uniqueness: { case_sensitive: false }
 
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }
