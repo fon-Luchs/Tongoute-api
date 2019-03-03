@@ -2,32 +2,19 @@ class Api::WallsController < BaseController
 
   include Relatable
 
-  before_action :build_resource, only: :create
-
   private
 
-  def build_resource
-    @post = current_user.posts.new(resource_params) unless banned?
-  end
-
   def resource
-    @post ||= Post.find_by!(id: params[:id], destination_id: destination_id) unless banned?
-  end
-
-  def collection
-    @posts = Post.all.where(destination_id: destination_id) unless banned?
-  end
-
-  def resource_params
-    params.require(:post).permit(:title, :body).merge(destination_id: destination_id)
-  end
-
-  def destination_id
-    id = params[:user_id] || current_user.id
-    id
+    @wall = set_user.wall
   end
 
   def banned?
-    head 403 if relation_finder(current_user).blocked_users.exists?( related_id: destination_id ) 
+    head 403 if relation_finder(set_user).blocked_users.exists?( related_id: current_user.id ) 
+  end
+
+  def set_user
+    user = User.find(params[:user_id]) if params[:user_id]
+    user ||= current_user
+    user
   end
 end

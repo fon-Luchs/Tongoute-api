@@ -3,13 +3,40 @@ require 'rails_helper'
 RSpec.describe 'GetProfileSubResource', type: :request do
   let(:user) { create(:user, :with_auth_token) }
 
-  let(:sub_user) { create(:user, id: 1) }
+  let(:sub_user) { create(:user, :with_wall, id: 1) }
 
   let!(:relation) { create(:relation, related_id: user.id, relating_id: sub_user.id, id: 1) }
 
   let(:value) { user.auth_token.value }
 
   let(:headers) { { 'Authorization' => "Token token=#{value}", 'Content-type' => 'application/json', 'Accept' => 'application/json' } }
+
+  let(:owner) do
+    {
+      'id' => sub_user.id,
+      'name' => "#{sub_user.first_name} #{sub_user.last_name}"
+    }
+  end
+
+  let(:posts) do
+    sub_user.wall.posts.map do |p|
+      {
+        'author' => owner,
+        'body' => p.body,
+        'id' => p.id,
+        'likes' => 332
+      }
+    end
+  end
+
+  let(:wall) do
+    {
+      'id' => sub_user.wall.id,
+      'owner' => owner,
+      'posts' => posts
+    }
+  end
+
 
   let(:resource_response) do
     {
@@ -44,7 +71,7 @@ RSpec.describe 'GetProfileSubResource', type: :request do
         "photos"=>1,
         "subscribers"=>0,
         "videos"=>1,
-        "wall"=>[]
+        "wall"=>wall
       }
     }
   end

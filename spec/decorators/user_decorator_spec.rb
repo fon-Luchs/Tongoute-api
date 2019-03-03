@@ -2,7 +2,7 @@ require 'rails_helper'
 
 RSpec.describe UserDecorator do
   describe 'profile#as_json' do
-    let(:profile) { create(:user, first_name: 'Jarry', last_name: 'Smith') }
+    let(:profile) { create(:user, :with_wall, first_name: 'Jarry', last_name: 'Smith') }
 
     subject { profile.decorate(context: {profile: true}).as_json }
 
@@ -12,7 +12,7 @@ RSpec.describe UserDecorator do
 
     its([:location]) { should eq "#{profile.country}, #{profile.locate}" }
 
-    its([:wall]) { should eq Post.where(destination_id: profile.id) }
+    its([:wall]) { should eq wall(profile) }
 
     its([:groups])  { should eq groups }
 
@@ -81,6 +81,14 @@ RSpec.describe UserDecorator do
       relation:[{:id=>23, :name=>"Jarry Smith", :relations=>"Best friend"}, {:id=>23, :name=>"Jarry Smith", :relations=>"Best friend"}],
       location: "#{profile.country}, #{profile.locate}",
       about_self: profile.about
+    }
+  end
+
+  def wall(user)
+    {
+      id: user.wall.id,
+      owner: { id: user.id, name: "#{user.first_name} #{user.last_name}" },
+      posts: []
     }
   end
 end

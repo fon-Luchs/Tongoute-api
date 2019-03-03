@@ -5,7 +5,9 @@ Rails.application.routes.draw do
     resource :profile, only: [:create, :destroy, :update, :show] do
       resources :notes
 
-      resources :walls
+      resource :wall, only: :show do
+        resources :posts, only: [:create, :update, :show, :destroy]
+      end
 
       resources :friends, only: [:show, :index] do
         delete 'remove', to: 'friends#destroy'
@@ -43,7 +45,9 @@ Rails.application.routes.draw do
     end
 
     resources :users, only: [:show, :index] do
-      resources :walls
+      resource :wall, only: :show do
+        resources :posts, only: [:create, :update, :show, :destroy]
+      end
 
       resources :subscribers, only: [:index]
       

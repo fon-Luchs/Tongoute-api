@@ -2,9 +2,9 @@ require 'rails_helper'
 
 RSpec.describe RelationDecorator do
 
-  let(:user)          { create(:user, first_name: 'Jarry', last_name: 'Smith') }
+  let(:user)          { create(:user, :with_wall, first_name: 'Jarry', last_name: 'Smith') }
 
-  let(:sub_user)      { create(:user, first_name: 'Jeffrey', last_name: 'Lebowski') }
+  let(:sub_user)      { create(:user, :with_wall, first_name: 'Jeffrey', last_name: 'Lebowski') }
 
   let(:subs) { create(:relation, relating_id: sub_user.id, related_id: user.id) }
 
@@ -123,7 +123,7 @@ RSpec.describe RelationDecorator do
       id: user.id,
       name: "#{user.first_name} #{user.last_name}",
       information: profile_information(user),
-      wall: [],
+      wall: wall(user),
       groups: 2,
       friends: 0,
       subscribers: 0,
@@ -137,6 +137,14 @@ RSpec.describe RelationDecorator do
     {
       id: user.id,
       name: "#{user.first_name} #{user.last_name}"
+    }
+  end
+
+  def wall(user)
+    {
+      id: user.wall.id,
+      owner: user_index(user),
+      posts: []
     }
   end
 

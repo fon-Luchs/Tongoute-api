@@ -12,6 +12,12 @@ FactoryBot.define do
       association :auth_token
     end
 
+    trait :with_wall do
+      after :create do |user|
+        create :wall, wallable: user
+      end
+    end
+
     trait :with_relation_content do
       after :create do |user|
         create_list :group, 2, user: user

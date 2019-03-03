@@ -3,13 +3,39 @@ require 'rails_helper'
 RSpec.describe 'InviteUserToFriend', type: :request do
   let(:user) { create(:user, :with_auth_token, id: 2) }
 
-  let(:f_user) { create(:user, id: 1) }
+  let(:f_user) { create(:user, :with_wall, id: 1) }
 
   let!(:subscribe) { create(:relation, related_id: user.id, relating_id: f_user.id, id: 1) }
 
   let(:value) { user.auth_token.value }
 
   let(:headers) { { 'Authorization' => "Token token=#{value}", 'Content-type' => 'application/json', 'Accept' => 'application/json' } }
+
+  let(:owner) do
+    {
+      'id' => f_user.id,
+      'name' => "#{f_user.first_name} #{f_user.last_name}"
+    }
+  end
+
+  let(:posts) do
+    f_user.wall.posts.map do |p|
+      {
+        'author' => owner,
+        'body' => p.body,
+        'id' => p.id,
+        'likes' => 332
+      }
+    end
+  end
+
+  let(:wall) do
+    {
+      'id' => f_user.wall.id,
+      'owner' => owner,
+      'posts' => posts
+    }
+  end
 
   let(:resource_response) do
     {
@@ -40,7 +66,7 @@ RSpec.describe 'InviteUserToFriend', type: :request do
           "photos"=>1,
           "subscribers"=>0,
           "videos"=>1,
-          "wall"=>[]
+          "wall"=>wall
         }
       }
   end

@@ -2,6 +2,7 @@ class UserDecorator < Draper::Decorator
   delegate_all
 
   decorates_associations :notes
+  decorates_associations :wall
 
   def as_json(*args)
     if context[:show]
@@ -10,7 +11,7 @@ class UserDecorator < Draper::Decorator
       name: name,
       location: location,
       information: info,
-      wall: wall,
+      wall: wall.as_json,
       groups: groups,
       friends: relations.friends,
       subscribers: relations.subscribers,
@@ -32,7 +33,7 @@ class UserDecorator < Draper::Decorator
       name: name,
       location: location,
       information: info,
-      wall: wall,
+      wall: wall.as_json,
       groups: groups,
       friends: relations.friends.decorate(context: {friend_index: true}).as_json,
       subscribers: relations.subscribers.decorate(context: {subscriber_index: true}).as_json,
@@ -84,11 +85,6 @@ class UserDecorator < Draper::Decorator
       name: 'Jarry Smith',
       relations: 'Best friend'
     }
-  end
-
-  def wall
-    posts = Post.all.where(destination_id: id)
-    posts.decorate.as_json
   end
 
   def groups

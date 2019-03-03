@@ -25,6 +25,8 @@ class User < ApplicationRecord
 
   has_one  :wall, as: :wallable
 
+  has_many :posts, as: :postable
+
   validates :email, presence: true, uniqueness: { case_sensitive: false }
 
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }

@@ -468,3 +468,71 @@ curl -H 'Accept: application/json' \
      -d 'message[text]=Hi)' \
      -X PATCH localhost:3000/api/profile/conversations/:conversation_id/messages/:id
 ```
+
+### Profile Wall
+
+```
+curl -H 'Accept: application/json' \
+     -H 'Authorization: Token token="XXXX-YYYY-ZZZZ"' \
+     localhost:3000/api/profile/wall
+```
+
+### User Wall
+
+```
+curl -H 'Accept: application/json' \
+     -H 'Authorization: Token token="XXXX-YYYY-ZZZZ"' \
+     localhost:3000/api/users/1/wall
+```
+
+### Create Wall Post
+
+```
+curl -H 'Accept: application/json' \
+     -H 'Authorization: Token token="XXXX-YYYY-ZZZZ"' \
+     -d 'post[body]=My first post' \
+      localhost:3000/api/profile/wall/posts
+
+curl -H 'Accept: application/json' \
+     -H 'Authorization: Token token="XXXX-YYYY-ZZZZ"' \
+     -d 'post[body]=My first post' \
+      localhost:3000/api/users/:id/wall/posts
+```
+
+### Update Wall Post
+
+```
+curl -H 'Accept: application/json' \
+     -H 'Authorization: Token token="XXXX-YYYY-ZZZZ"' \
+     -d 'post[body]=My first post' \
+      localhost:3000/api/profile/wall/posts/:id
+
+curl -H 'Accept: application/json' \
+     -H 'Authorization: Token token="XXXX-YYYY-ZZZZ"' \
+     -d 'post[body]=My first post' \
+      localhost:3000/api/users/:id/wall/posts/:id
+```
+
+### Show Wall Post
+
+```
+curl -H 'Accept: application/json' \
+     -H 'Authorization: Token token="XXXX-YYYY-ZZZZ"' \
+      localhost:3000/api/profile/wall/posts/:id
+
+curl -H 'Accept: application/json' \
+     -H 'Authorization: Token token="XXXX-YYYY-ZZZZ"' \
+      localhost:3000/api/users/:id/wall/posts/:id
+```
+
+### Delete Wall Post
+
+```
+curl -H 'Accept: application/json' \
+     -H 'Authorization: Token token="XXXX-YYYY-ZZZZ"' \
+     -X DELETE localhost:3000/api/profile/wall/posts/:id
+
+curl -H 'Accept: application/json' \
+     -H 'Authorization: Token token="XXXX-YYYY-ZZZZ"' \
+     -X DELETE localhost:3000/api/users/:id/wall/posts/:id
+```

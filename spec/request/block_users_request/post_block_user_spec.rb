@@ -3,11 +3,37 @@ require 'rails_helper'
 RSpec.describe 'BlockUser', type: :request do
   let(:user) { create(:user, :with_auth_token, id: 2) }
 
-  let(:b_user) { create(:user, id: 1) }
+  let(:b_user) { create(:user, :with_wall, id: 1) }
 
   let(:value) { user.auth_token.value }
 
   let(:headers) { { 'Authorization' => "Token token=#{value}", 'Content-type' => 'application/json', 'Accept' => 'application/json' } }
+
+  let(:owner) do
+    {
+      'id' => b_user.id,
+      'name' => "#{b_user.first_name} #{b_user.last_name}"
+    }
+  end
+
+  let(:posts) do
+    b_user.wall.posts.map do |p|
+      {
+        'author' => owner,
+        'body' => p.body,
+        'id' => p.id,
+        'likes' => 332
+      }
+    end
+  end
+
+  let(:wall) do
+    {
+      'id' => b_user.wall.id,
+      'owner' => owner,
+      'posts' => posts
+    }
+  end
 
   let(:resource_response) do
     {
@@ -38,7 +64,7 @@ RSpec.describe 'BlockUser', type: :request do
           "photos"=>1,
           "subscribers"=>0,
           "videos"=>1,
-          "wall"=>[]
+          "wall"=>wall
         }
       }
   end

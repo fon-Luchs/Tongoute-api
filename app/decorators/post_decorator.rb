@@ -1,11 +1,10 @@
 class PostDecorator < Draper::Decorator
   delegate_all
-  decorates_associations :user
+  decorates_associations :postable
 
   def as_json(*args)
     {
       id: object.id,
-      title: object.title,
       body: object.body,
       author: author,
       likes: 332
@@ -14,8 +13,8 @@ class PostDecorator < Draper::Decorator
 
   def author
     {
-      id: user.id,
-      name: user.name
+      id: postable.id,
+      name: postable.name
     }
   end
 end
