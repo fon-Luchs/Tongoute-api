@@ -26,7 +26,7 @@ RSpec.describe 'GetUser', type: :request do
       "bday" => user.date,
       "relations" => relations,
       "location" => "#{user.country}, #{user.locate}",
-      "address" => user.adres,
+      "address" => user.address,
       "about self" => user.about
     }
   end

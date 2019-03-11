@@ -42,6 +42,8 @@ Rails.application.routes.draw do
 
         resources :messages, only: [:create, :update]
       end
+
+      resources :groups
     end
 
     resources :users, only: [:show, :index] do

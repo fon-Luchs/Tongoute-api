@@ -27,6 +27,10 @@ class User < ApplicationRecord
 
   has_many :posts, as: :postable
 
+  has_many :user_groups
+
+  has_many :groups, through: :user_groups
+
   validates :email, presence: true, uniqueness: { case_sensitive: false }
 
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }

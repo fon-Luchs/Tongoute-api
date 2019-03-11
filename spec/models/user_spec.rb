@@ -17,6 +17,10 @@ RSpec.describe User, type: :model do
 
   it { should have_many(:messages) }
 
+  it { should have_many(:user_chats) }
+
+  it { should have_many(:user_groups) }
+
   it { should have_many(:chats) }
 
   it { should have_many(:likes) }
