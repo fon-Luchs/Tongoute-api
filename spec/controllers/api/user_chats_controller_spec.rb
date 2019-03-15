@@ -70,5 +70,28 @@ RSpec.describe Api::UserChatsController, type: :controller do
   end
 
   describe 'update#json' do
+    let(:params) { {user_id: user.id, chat_id: chat.id} }
+
+    before { expect(UserChat).to receive(:find_by!).with(params).and_return(user_chat) }
+
+    context 'success' do
+      before { expect(user_chat).to receive(:update).and_return(true) }
+
+      before { merge_headers request_headers }
+
+      before { put :update, params: params, format: :json }
+
+      it { should render_template :update }
+    end
+
+    context 'fail' do
+      before { expect(user_chat).to receive(:update).and_return(false) }
+
+      before { merge_headers request_headers }
+
+      before { put :update, params: params, format: :json }
+
+      it { should render_template :errors }
+    end
   end
 end

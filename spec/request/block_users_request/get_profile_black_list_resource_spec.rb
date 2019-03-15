@@ -44,7 +44,7 @@ RSpec.describe 'ProfileBlackListResource', type: :request do
       "user" => {
         "audios" => 1,
         "friends" => 0,
-        "groups" => 2,
+        "groups" => b_user.groups.count,
         "id" => b_user.id,
         "information" => {
           "about_self" => nil,

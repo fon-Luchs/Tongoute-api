@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe 'GetGroupIndex', type: :request do
-  let(:user)    { create(:user, :with_auth_token) }
+  let(:user)    { create(:user, :with_auth_token, id: 1) }
   
   let!(:group)   { create(:group, :with_wall, creator_id: user.id, id: 1) }
 
@@ -37,7 +37,7 @@ RSpec.describe 'GetGroupIndex', type: :request do
   before { group.users << user }
 
   context do
-    before { get '/api/profile/groups', params: {}, headers: headers }
+    before { get '/api/users/1/groups', params: {}, headers: headers }
 
     it('returns notes') { expect(JSON.parse(response.body)).to eq resource_response }
 
@@ -47,7 +47,7 @@ RSpec.describe 'GetGroupIndex', type: :request do
   context 'Unauthorized' do
     let(:value) { SecureRandom.uuid }
 
-    before { get '/api/profile/groups', params: {}, headers: headers }
+    before { get '/api/users/1/groups', params: {}, headers: headers }
 
     it('returns HTTP Status Code 401') { expect(response).to have_http_status :unauthorized }
   end

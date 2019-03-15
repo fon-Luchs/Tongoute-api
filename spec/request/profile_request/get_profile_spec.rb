@@ -13,6 +13,10 @@ RSpec.describe 'GetProfile', type: :request do
     end
   end
 
+  let(:friends) do
+    user.relations.where(state: 1)
+  end
+
   let(:relations) do
     user.relations.map do |relation|
       { "id" => relation.user_id, "name" => relation.user_name, "relation" => relation.relation }

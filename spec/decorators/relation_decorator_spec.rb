@@ -124,7 +124,7 @@ RSpec.describe RelationDecorator do
       name: "#{user.first_name} #{user.last_name}",
       information: profile_information(user),
       wall: wall(user),
-      groups: 2,
+      groups: user.groups.count,
       friends: 0,
       subscribers: 0,
       videos: 1,

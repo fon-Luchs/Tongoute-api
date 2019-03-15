@@ -45,7 +45,7 @@ RSpec.describe 'GetProfileSubscribeResource', type: :request do
       'user' => {
         "audios" => 1,
         "friends" => 0,
-        "groups" => 2,
+        "groups" => sub_user.groups.count,
         "id" => sub_user.id,
         "information" => {
           "about_self" => nil,

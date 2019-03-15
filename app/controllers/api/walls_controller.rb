@@ -14,6 +14,7 @@ class Api::WallsController < BaseController
 
   def set_user
     user = User.find(params[:user_id]) if params[:user_id]
+    user = Group.find(params[:group_id]) if params[:group_id]
     user ||= current_user
     user
   end

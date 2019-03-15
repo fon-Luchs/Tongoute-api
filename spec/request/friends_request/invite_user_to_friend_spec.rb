@@ -44,7 +44,7 @@ RSpec.describe 'InviteUserToFriend', type: :request do
       "user" => {
         "audios" => 1,
         "friends" => 0,
-        "groups" => 2,
+        "groups" => f_user.groups.count,
         "id" => 1,
         "information" => {
           "about_self" => nil,

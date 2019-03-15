@@ -3,6 +3,7 @@ class UserDecorator < Draper::Decorator
 
   decorates_associations :notes
   decorates_associations :wall
+  decorates_associations :groups
 
   def as_json(*args)
     if context[:show]
@@ -34,7 +35,7 @@ class UserDecorator < Draper::Decorator
       location: location,
       information: info,
       wall: wall.as_json,
-      groups: groups,
+      groups: groups.as_json,
       friends: relations.friends.decorate(context: {friend_index: true}).as_json,
       subscribers: relations.subscribers.decorate(context: {subscriber_index: true}).as_json,
       subscribings: relations.subscribings.decorate(context: {subscribed_index: true}).as_json,
@@ -85,22 +86,6 @@ class UserDecorator < Draper::Decorator
       name: 'Jarry Smith',
       relations: 'Best friend'
     }
-  end
-
-  def groups
-    [
-      {
-        id: 1,
-        name: 'Tongoute Community',
-        users: 133_221
-      },
-
-      {
-        id: 1332,
-        name: 'Slayer',
-        users: 321_42
-      }
-    ]
   end
 
   def videos

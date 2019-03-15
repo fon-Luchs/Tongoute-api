@@ -44,7 +44,7 @@ RSpec.describe 'GetProfileFriendResource', type: :request do
       'user' => {
         "audios" => 1,
         "friends" => 0,
-        "groups" => 2,
+        "groups" => friend_user.groups.count,
         "id" => friend_user.id,
         "information" => {
           "about_self" => nil,

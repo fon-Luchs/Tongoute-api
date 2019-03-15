@@ -5,6 +5,10 @@ RSpec.describe UserGroup, type: :model do
 
   it { should belong_to(:user) }
 
+  it { should  validate_presence_of(:group) }
+
+  it { should  validate_presence_of(:user) }
+
   describe "uniquness_of_relation" do
     let(:current_user) { create(:user) }
 

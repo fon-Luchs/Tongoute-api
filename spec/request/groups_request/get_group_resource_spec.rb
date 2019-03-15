@@ -43,7 +43,7 @@ RSpec.describe 'GetGroupResource', type: :request do
   before { group.users << user }
 
   context do
-    before { get '/api/profile/groups/1', params: {}, headers: headers }
+    before { get '/api/groups/1', params: {}, headers: headers }
 
     it('returns notes') { expect(JSON.parse(response.body)).to eq resource_response }
 
@@ -53,13 +53,13 @@ RSpec.describe 'GetGroupResource', type: :request do
   context 'Unauthorized' do
     let(:value) { SecureRandom.uuid }
 
-    before { get '/api/profile/groups/1', params: {}, headers: headers }
+    before { get '/api/groups/1', params: {}, headers: headers }
 
     it('returns HTTP Status Code 401') { expect(response).to have_http_status :unauthorized }
   end
 
   context 'group was not found' do
-    before { get '/api/profile/groups/0', params: {}, headers: headers }
+    before { get '/api/groups/0', params: {}, headers: headers }
 
     it('returns HTTP Status Code 404') { expect(response).to have_http_status 404 }
   end

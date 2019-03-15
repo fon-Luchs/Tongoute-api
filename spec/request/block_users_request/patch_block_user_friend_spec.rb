@@ -51,7 +51,7 @@ RSpec.describe 'BlockUserFriend', type: :request do
       "user" => {
         "audios" => 1,
         "friends" => 0,
-        "groups" => 2,
+        "groups" => b_user.groups.count,
         "id" => 1,
         "information" => {
           "about_self" => nil,
@@ -78,9 +78,25 @@ RSpec.describe 'BlockUserFriend', type: :request do
       }
   end
 
-  before { patch '/api/profile/friends/1/block', params: params.to_json, headers: headers }
-
   context do
+    before { patch '/api/profile/friends/1/block', params: params.to_json, headers: headers }
+
     it('returns created block') { expect(JSON.parse(response.body)).to eq block_response }
+
+    it('returns HTTP Status Code 200') { expect(response).to have_http_status 200 }
+  end
+
+  context 'Unauthorized' do
+    let(:value) { SecureRandom.uuid }
+
+    before { patch '/api/profile/friends/1/block', params: params.to_json, headers: headers }
+
+    it('returns HTTP Status Code 401') { expect(response).to have_http_status :unauthorized }
+  end
+
+  context 'friends was not found' do
+    before { patch '/api/profile/friends/0/block', params: params.to_json, headers: headers }
+
+    it('returns HTTP Status Code 404') { expect(response).to have_http_status 404 }
   end
 end

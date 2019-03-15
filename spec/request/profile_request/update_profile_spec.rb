@@ -15,6 +15,10 @@ RSpec.describe 'UpdateProfile', type: :request do
     end
   end
 
+  let(:friends) do
+    user.relations.where(state: 1)
+  end
+
   let(:info) do
     {
       "email" => user.email,
@@ -34,7 +38,7 @@ RSpec.describe 'UpdateProfile', type: :request do
       "information" => info,
       "wall" => user.wall,
       "groups" => user.groups.count,
-      "friends" => user.friends,
+      "friends" => friends,
       "video" => user.videos,
       "photos" => user.photos,
       "audios" => user.audios,

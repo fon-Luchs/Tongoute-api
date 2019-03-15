@@ -2,17 +2,19 @@ require 'rails_helper'
 
 RSpec.describe Api::GroupsController, type: :controller do
   describe 'routes test' do
-    it { should route(:get, 'api/profile/groups/1').to(action: :show, controller: 'api/groups', id: 1) }
-
     it { should route(:get, 'api/profile/groups').to(action: :index, controller: 'api/groups') }
 
-    it { should route(:post, 'api/profile/groups').to(action: :create, controller: 'api/groups') }
+    it { should route(:get, 'api/users/1/groups').to(action: :index, controller: 'api/groups', user_id: 1) }
 
-    it { should route(:put, 'api/profile/groups/1').to(action: :update, controller: 'api/groups', id: 1) }
+    it { should route(:get, 'api/groups/1').to(action: :show, controller: 'api/groups', id: 1) }
 
-    it { should route(:patch, 'api/profile/groups/1').to(action: :update, controller: 'api/groups', id: 1) }
+    it { should route(:post, 'api/groups').to(action: :create, controller: 'api/groups') }
 
-    it { should route(:delete, 'api/profile/groups/1').to(action: :destroy, controller: 'api/groups', id: 1) }
+    it { should route(:put, 'api/groups/1').to(action: :update, controller: 'api/groups', id: 1) }
+
+    it { should route(:patch, 'api/groups/1').to(action: :update, controller: 'api/groups', id: 1) }
+
+    it { should route(:delete, 'api/groups/1').to(action: :destroy, controller: 'api/groups', id: 1) }
   end
 
   let(:user)  { create(:user, :with_auth_token) }

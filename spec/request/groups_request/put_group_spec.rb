@@ -47,7 +47,7 @@ RSpec.describe 'PatchGroup', type: :request do
   before { group.users << user }
 
   context do
-    before { put '/api/profile/groups/1', params: params.to_json, headers: headers }
+    before { put '/api/groups/1', params: params.to_json, headers: headers }
 
     it('returns notes') { expect(JSON.parse(response.body)).to eq resource_response }
 
@@ -57,19 +57,19 @@ RSpec.describe 'PatchGroup', type: :request do
   context 'Unauthorized' do
     let(:value) { SecureRandom.uuid }
 
-    before { put '/api/profile/groups/1', params: params.to_json, headers: headers }
+    before { put '/api/groups/1', params: params.to_json, headers: headers }
 
     it('returns HTTP Status Code 401') { expect(response).to have_http_status :unauthorized }
   end
 
   context 'group was not found' do
-    before { put '/api/profile/groups/0', params: params.to_json, headers: headers }
+    before { put '/api/groups/0', params: params.to_json, headers: headers }
 
     it('returns HTTP Status Code 404') { expect(response).to have_http_status 404 }
   end
 
   context 'invalid params' do
-    before { put '/api/profile/groups/1', params: {}, headers: headers }
+    before { put '/api/groups/1', params: {}, headers: headers }
 
     it('returns HTTP Status Code 422') { expect(response).to have_http_status 422 }
   end

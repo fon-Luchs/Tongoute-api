@@ -43,7 +43,7 @@ Rails.application.routes.draw do
         resources :messages, only: [:create, :update]
       end
 
-      resources :groups
+      resources :groups, only: :index
     end
 
     resources :users, only: [:show, :index] do
@@ -60,6 +60,18 @@ Rails.application.routes.draw do
       resources :conversations, only: [:create, :show]
 
       post   'request', to: 'subscribings#create'
+
+      resources :groups, only: :index
+    end
+
+    resources :groups, except: :index do
+      post   'join',  to: 'user_groups#create'
+
+      delete 'leave', to: 'user_groups#destroy'
+
+      resource :wall, only: :show do
+        resources :posts, only: [:create, :update, :show, :destroy]
+      end
     end
   end
 end
