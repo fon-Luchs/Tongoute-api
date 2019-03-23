@@ -7,6 +7,12 @@ class Group < ApplicationRecord
 
   has_many :posts, as: :postable
 
+  has_many :active_conversations, as: :senderable, class_name: 'Conversation'
+
+  has_many :pasive_conversations, as: :recipientable, class_name: 'Conversation'
+
+  has_many :messages, as: :messageable
+
   validates :name, presence: true
 
   validates :creator_id, presence: true

@@ -12,4 +12,10 @@ RSpec.describe Group, type: :model do
   it { should validate_presence_of(:name) }
 
   it { should validate_presence_of(:creator_id) }
+
+  it { should have_many(:active_conversations) }
+
+  it { should have_many(:pasive_conversations) }
+
+  it { should have_many(:messages) }
 end

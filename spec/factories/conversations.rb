@@ -1,7 +1,11 @@
 FactoryBot.define do
   factory :conversation do
-    sender_id { nil }
+    senderable_id      { senderable.id }
 
-    recipient_id { nil }
+    senderable_type    { senderable.class.name }
+
+    recipientable_id   { recipientable.id }
+
+    recipientable_type { recipientable.class.name }
   end
 end

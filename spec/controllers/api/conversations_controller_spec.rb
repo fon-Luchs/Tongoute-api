@@ -11,11 +11,11 @@ RSpec.describe Api::ConversationsController, type: :controller do
     it { should route(:get, 'api/users/1/conversations/1').to(action: :show, controller: 'api/conversations', user_id: 1, id: 1) }
   end
 
-  let(:user) { create(:user, :with_auth_token) }
+  let(:user) { create(:user, :with_auth_token, id: 2) }
 
-  let(:recipient) { create(:user) }
+  let(:recipient) { create(:user, id: 1) }
 
-  let(:conversation) { create(:conversation, sender: user, recipient: recipient) }
+  let(:conversation) { create(:conversation, senderable: user, recipientable: recipient) }
 
   let(:value)            { user.auth_token.value }
 
@@ -31,7 +31,8 @@ RSpec.describe Api::ConversationsController, type: :controller do
     {
       conversation:
       {
-        recipient_id: recipient.id.to_s
+        recipientable_id: recipient.id,
+        recipientable_type: recipient.class.name,
       }
     }
   end

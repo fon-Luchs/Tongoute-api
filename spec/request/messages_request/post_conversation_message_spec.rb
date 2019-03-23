@@ -5,7 +5,7 @@ RSpec.describe 'PostConversationMessage', type: :request do
   
   let(:recipient) { create(:user) }
 
-  let!(:conversation) { create(:conversation, sender_id: user.id, recipient_id: recipient.id, id: 1) }
+  let!(:conversation) { create(:conversation, senderable: user, recipientable: recipient, id: 1) }
 
   let(:value) { user.auth_token.value }
 

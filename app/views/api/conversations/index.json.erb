@@ -1,7 +1,7 @@
 <%=
   if banned?
-    sanitize collection.decorate(context: { blocked: true }).to_json
+    sanitize collection.decorate(context: { blocked: banned? }).to_json
   else
-    sanitize collection.decorate(context: {conversations_index: true, user_id: current_id}).to_json
+    sanitize collection.decorate(context: {conversations_index: current_object }).to_json
   end
 %>

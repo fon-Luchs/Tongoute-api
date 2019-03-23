@@ -5,7 +5,7 @@ RSpec.describe 'GetConversationWithUser', type: :request do
   
   let(:recipient) { create(:user, id: 1) }
 
-  let!(:conversation) { create(:conversation, sender_id: user.id, recipient_id: recipient.id, id: 1) }
+  let!(:conversation) { create(:conversation, senderable: user, recipientable: recipient, id: 1) }
 
   let(:value) { user.auth_token.value }
 
@@ -18,6 +18,15 @@ RSpec.describe 'GetConversationWithUser', type: :request do
     }
   end
 
+  let(:interlocutor) do
+    {
+      'id' => recipient.id,
+      'name' => "#{recipient.first_name} #{recipient.last_name}",
+      'type' => recipient.class.name 
+    }
+  end
+
+
   let(:last_message) do
     {
       'author' => author,
@@ -29,7 +38,7 @@ RSpec.describe 'GetConversationWithUser', type: :request do
   let(:resource_response) do
     {
       'id' => conversation.id,
-      'name' => "#{recipient.first_name} #{recipient.last_name}",
+      'interlocutor' => interlocutor,
       'messages' => [last_message]
     }
   end

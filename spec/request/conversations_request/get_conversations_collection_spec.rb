@@ -5,7 +5,7 @@ RSpec.describe 'GetConversationCOllection', type: :request do
   
   let(:recipient) { create(:user) }
 
-  let!(:conversation) { create(:conversation, sender_id: user.id, recipient_id: recipient.id) }
+  let!(:conversation) { create(:conversation, senderable: user, recipientable: recipient) }
 
   let(:value) { user.auth_token.value }
 
@@ -26,12 +26,20 @@ RSpec.describe 'GetConversationCOllection', type: :request do
     }
   end
 
+  let(:interlocutor) do
+    {
+      'id' => recipient.id,
+      'name' => "#{recipient.first_name} #{recipient.last_name}",
+      'type' => recipient.class.name 
+    }
+  end
+
   let(:resource_response) do
     Conversation.all.map do |c|
       {
         'id' => c.id,
-        'name' => "#{recipient.first_name} #{recipient.last_name}",
-        'messages' => [last_message]
+        'interlocutor' => interlocutor,
+        'last_message' => last_message
       }
     end
   end

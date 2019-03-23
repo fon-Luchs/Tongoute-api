@@ -1,11 +1,13 @@
 require 'rails_helper'
 
-RSpec.describe 'GetConversationResource', type: :request do
+RSpec.describe 'GetGroupConversation', type: :request do
   let(:user)    { create(:user, :with_auth_token) }
   
-  let(:recipient) { create(:user) }
+  let(:group)   { create(:group, creator_id: user.id, id:1) }
 
-  let!(:conversation) { create(:conversation, senderable: user, recipientable: recipient, id: 1) }
+  let!(:conversation) { create(:conversation, senderable: group, recipientable: recipient, id: 1) }
+
+  let(:recipient) { create(:user, id: 1) }
 
   let(:value) { user.auth_token.value }
 
@@ -15,14 +17,6 @@ RSpec.describe 'GetConversationResource', type: :request do
     {
       'id' => user.id,
       'name' => "#{user.first_name} #{user.last_name}"
-    }
-  end
-
-  let(:last_message) do
-    {
-      'author' => author,
-      'id' => message.id,
-      'text' => message.text
     }
   end
 
@@ -38,18 +32,12 @@ RSpec.describe 'GetConversationResource', type: :request do
     {
       'id' => conversation.id,
       'interlocutor' => interlocutor,
-      'messages' => [last_message]
+      'messages' => []
     }
   end
 
-  before { create(:message, user_id: user.id,
-    messageable_id: conversation.id,
-    messageable_type: conversation.class.name ) }
-  
-  let(:message) { Message.last }
-
   context do
-    before { get '/api/profile/conversations/1', params: {}, headers: headers }
+    before { get '/api/groups/1/conversations/1?as_group=true', params: {}, headers: headers }
 
     it('returns notes') { expect(JSON.parse(response.body)).to eq resource_response }
 
@@ -59,13 +47,19 @@ RSpec.describe 'GetConversationResource', type: :request do
   context 'Unauthorized' do
     let(:value) { SecureRandom.uuid }
 
-    before { get '/api/profile/conversations/1', params: {}, headers: headers }
+    before { get '/api/groups/1/conversations/1?as_group=true', params: {}, headers: headers }
 
     it('returns HTTP Status Code 401') { expect(response).to have_http_status :unauthorized }
   end
 
+  context 'Group was not found' do
+    before { get '/api/groups/0/conversations/1?as_group=true', params: {}, headers: headers }
+
+    it('returns HTTP Status Code 404') { expect(response).to have_http_status 404 }
+  end
+
   context 'Conversation was not found' do
-    before { get '/api/profile/conversations/0', params: {}, headers: headers }
+    before { get '/api/groups/1/conversations/0?as_group=true', params: {}, headers: headers }
 
     it('returns HTTP Status Code 404') { expect(response).to have_http_status 404 }
   end

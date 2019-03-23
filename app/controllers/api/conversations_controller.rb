@@ -4,41 +4,43 @@ class Api::ConversationsController < BaseController
   
   before_action :build_resource, only: :create
 
-  helper_method :current_id
+  helper_method :current_object
 
   private
 
   def build_resource
-    @conversation = current_user.active_conversations.new(resource_params)
+    @conversation = sender_object.active_conversations.new(resource_params)
   end
 
   def resource
-    @conversation ||= conversations.find(params[:id])
+    @conversation ||= collection.find(params[:id])
   end
 
   def collection
-    @conversations ||= conversations
+    @conversations = Conversation::ObjectConversations.call(sender_object)
   end
 
   def resource_params
-    params.permit().merge(recipient_id: params[:user_id])
+    params.permit().merge(recipientable_id: recipient_object.id, recipientable_type: recipient_object.class.name )
   end
 
-  def conversations
-    @conversations = UserConversations.new(current_user).get_conversations
+  def optional_params
+    params.permit().merge(as_group_id: params[:as_group_id], as_group: params[:as_group])
+  end
+
+  def sender_object
+    Conversation::InterlocutorSetter.new(params, optional_params, current_user).interlocutor_sender    
+  end
+
+  def recipient_object
+    Conversation::InterlocutorSetter.new(params, optional_params, current_user).interlocutor_recipient
   end
 
   def banned?
-    res = relation_finder(get_interlocutor).blocked_users.exists?(related_id: current_user.id) if params[:id] || params[:user_id]
-    res
+    false
   end
 
-  def get_interlocutor
-    id = resource.sender_id == current_id ? resource.recipient_id : resource.sender_id
-    User.find(id)
-  end
-
-  def current_id
-    current_user.id
+  def current_object
+    Tools::PolymorphicData.call(sender_object)
   end
 end

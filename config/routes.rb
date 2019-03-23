@@ -69,6 +69,10 @@ Rails.application.routes.draw do
 
       delete 'leave', to: 'user_groups#destroy'
 
+      resources :conversations, only: [:create, :show]
+
+      resources :messages, only: [:create, :update]
+
       resource :wall, only: :show do
         resources :posts, only: [:create, :update, :show, :destroy]
       end

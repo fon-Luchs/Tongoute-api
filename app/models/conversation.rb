@@ -1,13 +1,17 @@
 class Conversation < ApplicationRecord
   has_many :messages, as: :messageable
   
-  belongs_to :sender, class_name: 'User'
+  belongs_to :senderable, polymorphic: true
 
-  belongs_to :recipient, class_name: 'User'
+  belongs_to :recipientable, polymorphic: true
 
-  validates :sender_id, presence: true
+  validates :senderable_id, presence: true
 
-  validates :recipient_id, presence: true
+  validates :recipientable_id, presence: true
 
-  validates :sender, uniqueness: { scope: :recipient_id }
+  validates :senderable_type, presence: true
+
+  validates :recipientable_type, presence: true
+
+  validates :senderable_id, uniqueness: { scope: [:recipientable_id, :recipientable_type, :senderable_type] }
 end

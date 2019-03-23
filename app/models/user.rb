@@ -13,15 +13,15 @@ class User < ApplicationRecord
 
   has_many :blockers, through: :pasive_block, source: :blocker
 
-  has_many :active_conversations, foreign_key: :sender_id, class_name: 'Conversation'
+  has_many :active_conversations, as: :senderable, class_name: 'Conversation'
 
-  has_many :pasive_conversations, foreign_key: :recipient_id, class_name: 'Conversation'
+  has_many :pasive_conversations, as: :recipientable, class_name: 'Conversation'
 
   has_many :user_chats
 
   has_many :chats, through: :user_chats
 
-  has_many :messages
+  has_many :messages, as: :messageable
 
   has_one  :wall, as: :wallable
 
