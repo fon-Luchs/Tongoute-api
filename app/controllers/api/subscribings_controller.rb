@@ -1,9 +1,7 @@
 class Api::SubscribingsController < BaseController
-  
-  include Relatable
-  
+
   before_action :build_resource, only: :create
-  
+
   helper_method :friend_request?, :current_id
 
   private
@@ -17,28 +15,27 @@ class Api::SubscribingsController < BaseController
   end
 
   def collection
-    @subscibing = relation_finder(current_user).subscribings
+    @subscibing = relation.subscribings
   end
 
   def resource_params
-    params.permit().merge(related_id: get_object.id)
+    params.permit.merge(related_id: get_object.id)
   end
 
   def get_object
-    @user = relation_finder(current_user).subscribings.find(params[:subscribing_id]) if params[:subscribing_id]
-    @user = relation_finder(current_user).subscribings.find(params[:id]) if params[:id]
-    @user = User.find(params[:user_id]) if params[:user_id]
-    @user
+    Subscribing::SubscribingUser.call(relation, params)
   end
 
   def friend_request?
-    relation_finder(current_user).friends.exists?(id: get_object.id)
+    relation.friends.exists?(id: get_object.id)
+  end
+
+  def relation
+    Relation::RelationsTypeGetter.new(current_user)
   end
 
   def banned?
-    ban = relation_finder(get_object).blocked_users.exists?(related_id: current_user.id) if params[:user_id]
-    ban = relation_finder(User.find(get_object.initiated.id)).blocked_users.exists?(related_id: current_user.id) if params[:id]
-    ban
+    Subscribing::BannedHelper.call(current_user, get_object, params)
   end
 
   def current_id

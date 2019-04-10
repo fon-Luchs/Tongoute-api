@@ -13,8 +13,7 @@ class Api::SubscribersController < BaseController
   end
 
   def set_user
-    @user = User.find(params[:user_id]) if params[:user_id]
-    @user ||= current_user
+    params[:user_id] ? User.find(params[:user_id]) : current_user
   end
 
   def banned?

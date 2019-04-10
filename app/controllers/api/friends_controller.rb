@@ -1,7 +1,4 @@
 class Api::FriendsController < BaseController
-  
-  include Relatable
-  
   helper_method :current_id
 
   before_action :build_resource, only: :create
@@ -17,7 +14,7 @@ class Api::FriendsController < BaseController
   end
 
   def collection
-    @friends = relation_finder(set_user).friends
+    @friends = relation.friends
   end
 
   def set_user
@@ -25,20 +22,19 @@ class Api::FriendsController < BaseController
   end
 
   def resource_params
-    params.permit().merge(related_id: set_resource.initiator.id)
+    params.permit.merge(related_id: set_resource.initiator.id)
   end
 
   def set_resource
-    res = relation_finder(set_user).friends.find(params[:id]) if params[:id]
-    res = relation_finder(set_user).friends.find(params[:friend_id]) if params[:friend_id]
-    res = relation_finder(set_user).subscribers.find(params[:subscriber_id]) if params[:subscriber_id]
-    res
+    Friend::FriendUser.new(params: params, user_relation: relation).call
+  end
+
+  def relation
+    Relation::RelationsTypeGetter.new set_user
   end
 
   def banned?
-    res = relation_finder(User.find(set_user.initiator.id)).blocked_users.exists?(related_id: current_user.id) if params[:friend_id]
-    res = relation_finder(User.find(set_user.initiator.id)).blocked_users.exists?(related_id: current_user.id) if params[:user_id]
-    res
+    Friend::BannedHelper.call(current_user, resource, params)
   end
 
   def current_id

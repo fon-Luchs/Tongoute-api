@@ -1,7 +1,4 @@
 class Api::ConversationsController < BaseController
-  
-  include Relatable
-  
   before_action :build_resource, only: :create
 
   helper_method :current_object
@@ -21,15 +18,15 @@ class Api::ConversationsController < BaseController
   end
 
   def resource_params
-    params.permit().merge(recipientable_id: recipient_object.id, recipientable_type: recipient_object.class.name )
+    params.permit.merge(recipientable_id: recipient_object.id, recipientable_type: recipient_object.class.name )
   end
 
   def optional_params
-    params.permit().merge(as_group_id: params[:as_group_id], as_group: params[:as_group])
+    params.permit.merge(as_group_id: params[:as_group_id], as_group: params[:as_group])
   end
 
   def sender_object
-    Conversation::InterlocutorSetter.new(params, optional_params, current_user).interlocutor_sender    
+    Conversation::InterlocutorSetter.new(params, optional_params, current_user).interlocutor_sender
   end
 
   def recipient_object

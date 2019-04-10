@@ -9,6 +9,10 @@ RSpec.describe Api::MessagesController, type: :controller do
     it { should route(:post, 'api/profile/chats/1/messages').to(action: :create, controller: 'api/messages', chat_id: 1) }
 
     it { should route(:patch, 'api/profile/chats/1/messages/1').to(action: :update, controller: 'api/messages', chat_id: 1, id: 1) }
+
+    it { should route(:post, 'api/groups/1/messages').to(action: :create, controller: 'api/messages', group_id: 1) }
+
+    it { should route(:patch, 'api/groups/1/messages/1').to(action: :update, controller: 'api/messages', group_id: 1, id: 1) }
   end
 
   let(:user)  { create(:user, :with_auth_token) }

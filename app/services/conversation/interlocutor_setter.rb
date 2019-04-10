@@ -18,10 +18,7 @@ class Conversation::InterlocutorSetter
   private
 
   def get_sender
-    object = Group.find_by!(id: params[:as_group_id], creator_id: current_user.id) if strong_params[:as_group_id]
-    object = Group.find_by!(id: params[:group_id], creator_id: current_user.id) if strong_params[:as_group]
-    object ||= current_user
-    object
+    Group::AsGroupCheker.call(params, current_user)
   end
 
   def get_recipient

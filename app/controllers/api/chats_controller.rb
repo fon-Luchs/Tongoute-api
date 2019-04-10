@@ -4,9 +4,7 @@ class Api::ChatsController < BaseController
   private
 
   def build_resource
-    @chat = Chat.new(resource_params.merge(creator_id: current_user.id))
-    @chat.users << current_user
-    @chat
+    @chat = builder.build
   end
 
   def resource
@@ -17,7 +15,15 @@ class Api::ChatsController < BaseController
     @chats = current_user.chats
   end
 
+  def build_params
+    resource_params.merge(creator_id: current_user.id)
+  end
+
   def resource_params
     params.require(:chat).permit(:name)
+  end
+
+  def builder
+    Tools::ThroughJoinBuilder.new(klass: Chat, c_user: current_user, params: build_params)
   end
 end

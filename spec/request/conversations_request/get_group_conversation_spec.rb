@@ -2,8 +2,8 @@ require 'rails_helper'
 
 RSpec.describe 'GetGroupConversation', type: :request do
   let(:user)    { create(:user, :with_auth_token) }
-  
-  let(:group)   { create(:group, creator_id: user.id, id:1) }
+
+  let(:group)   { create(:group, creator_id: user.id, id: 1) }
 
   let!(:conversation) { create(:conversation, senderable: group, recipientable: recipient, id: 1) }
 
@@ -24,7 +24,7 @@ RSpec.describe 'GetGroupConversation', type: :request do
     {
       'id' => recipient.id,
       'name' => "#{recipient.first_name} #{recipient.last_name}",
-      'type' => recipient.class.name 
+      'type' => recipient.class.name
     }
   end
 

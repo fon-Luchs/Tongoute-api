@@ -19,7 +19,7 @@ RSpec.describe Api::PostsController, type: :controller do
     it { should route(:delete, '/api/users/1/wall/posts/1').to(action: :destroy, controller: 'api/posts', id: 1, user_id: 1) }
   end
 
-  let(:user)  { create(:user, :with_auth_token, :with_wall) }
+  let(:user) { create(:user, :with_auth_token, :with_wall) }
 
   let(:wall_post)  { create(:post, postable: user, wall_id: user.wall.id) }
 
@@ -40,13 +40,7 @@ RSpec.describe Api::PostsController, type: :controller do
   before { sign_in user }
 
   describe 'create#json' do
-    before { expect(subject).to receive(:set_object).and_return(user) }
-
-    before do
-      expect(user).to receive(:posts) do
-        double.tap { |p| expect(p).to receive(:new).with(permitted_params).and_return(wall_post) }
-      end
-    end
+    before { expect(subject).to receive(:resource).and_return(wall_post) }
 
     context 'success' do
       before { expect(wall_post).to receive(:save).and_return(true) }

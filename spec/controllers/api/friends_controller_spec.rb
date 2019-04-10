@@ -13,15 +13,13 @@ RSpec.describe Api::FriendsController, type: :controller do
     it { should route(:delete, '/api/profile/friends/1/remove').to(action: :destroy, controller: 'api/friends', friend_id: 1) }
   end
 
-  let(:user)        { create(:user, :with_auth_token, id: 1) }
+  let(:user) { create(:user, :with_auth_token) }
 
-  let(:friend_user) { create(:user, id: 2) }
+  let(:value) { user.auth_token.value }
 
-  let(:subscribe)        { create(:relation, related_id: user.id, relating_id: friend_user.id, id: 11) }
+  let(:subscriber) { create(:user) }
 
-  let(:friend_subscribe) { create(:relation, related_id: friend_user.id, relating_id: user.id, id: 22) }
-
-  let(:value)            { user.auth_token.value }
+  before { sign_in user }
 
   let(:headers) do
     {
@@ -31,53 +29,50 @@ RSpec.describe Api::FriendsController, type: :controller do
     }
   end
 
-  let(:params) { { friend: { related_id: subscribe.initiator.id } } }
+  let(:params) { { friend: { related_id: subscriber.id} } }
 
   let(:permitted_params) { permit_params! params, :friend }
 
-  before { sign_in user }
-
   describe '#create.json' do
-    before do
-      expect(RelationsTypeGetter).to receive(:new).with(user) do
-        double.tap do |r|
-          expect(r).to receive_message_chain(:subscribers, :find)
-            .with(no_args).with(friend_user.id.to_s).and_return(subscribe)
-        end
-      end
-    end
+    before { create(:relation, related_id: user.id, relating_id: subscriber.id) }
+
+    let(:friend_response) { build(:relation, related_id: subscriber.id, relating_id: user.id) }
+
+    let(:subscribe) { Relation.last }
 
     before do
       expect(user).to receive_message_chain(:relations, :new)
         .with(no_args).with(permitted_params)
-        .and_return(friend_subscribe)
+        .and_return(friend_response)
     end
 
     context 'success' do
-      before { expect(friend_subscribe).to receive(:save).and_return(true) }
+      before { expect(friend_response).to receive(:save).and_return(true) }
 
       before { merge_headers headers }
 
-      before { post :create, params: { subscriber_id: friend_user.id }, format: :json }
+      before { post :create, params: { subscriber_id: subscribe.id }, format: :json }
 
       it { should render_template :create }
     end
 
-    context 'fail' do
-      before { expect(friend_subscribe).to receive(:save).and_return(false) }
+    context 'fails' do
+      before { expect(friend_response).to receive(:save).and_return(false) }
 
       before { merge_headers headers }
 
-      before { post :create, params: { subscriber_id: friend_user.id }, format: :json }
+      before { post :create, params: { subscriber_id: subscribe.id }, format: :json }
 
       it { should render_template :errors }
     end
   end
 
   describe '#show.json' do
-    let(:params) { { id: friend_user.id } }
+    let(:friend_response) { create(:relation, related_id: subscriber.id, relating_id: user.id) }
 
-    before { merge_header }
+    let(:params) { { id: friend_response.id } }
+
+    before { merge_headers headers }
 
     before { get :show, params: params, format: :json }
 
@@ -85,7 +80,7 @@ RSpec.describe Api::FriendsController, type: :controller do
   end
 
   describe '#index.json' do
-    before { merge_header }
+    before { merge_headers headers }
 
     before { get :index, format: :json }
 
@@ -93,9 +88,17 @@ RSpec.describe Api::FriendsController, type: :controller do
   end
 
   describe '#destroy.json' do
+    let(:friend_response) { create(:relation, related_id: subscriber.id, relating_id: user.id) }
+
+    let(:params) { { friend_id: friend_response.id } }
+
+    before { expect(subject).to receive(:destroy) }
+
+    before { merge_headers headers }
+
+    before { delete :destroy, params: params, format: :json }
+
+    it { expect(response).to have_http_status(204) }
   end
 
-  def merge_header
-    request.headers.merge!(headers)
-  end
 end

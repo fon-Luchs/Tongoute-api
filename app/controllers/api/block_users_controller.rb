@@ -1,11 +1,8 @@
 class Api::BlockUsersController < BaseController
-
-  include Relatable
-
   before_action :build_resource, only: :create
 
   def destroy
-    relation_finder(current_user).blocked_users.delete set_user
+    relation.blocked_users.delete set_user
     head 204
   end
 
@@ -20,7 +17,7 @@ class Api::BlockUsersController < BaseController
   end
 
   def collection
-    @block_users = relation_finder(current_user).blocked_users
+    @block_users = relation.blocked_users
   end
 
   def build_params
@@ -28,19 +25,18 @@ class Api::BlockUsersController < BaseController
   end
 
   def resource_params
-    params.permit().merge(state: 2)
+    params.permit.merge(state: 2)
   end
 
   def set_user
-    @b_user = relation_finder(current_user).friends.find(params[:friend_id]) if params[:friend_id]
-    @b_user = relation_finder(current_user).blocked_users.find(params[:id]) if params[:id]
-    @b_user = User.find(params[:user_id]) if params[:user_id]
-    @b_user
+    BlackList::BannedUser.new(params: params, user_relation: relation).call
+  end
+
+  def relation
+    Relation::RelationsTypeGetter.new current_user
   end
 
   def banned?
-    ban = relation_finder(set_user).blocked_users.exists?(related_id: current_user.id) if params[:user_id]
-    ban = relation_finder(User.find(resource.initiator.id)).blocked_users.exists?(related_id: current_user.id) if params[:friend_id] || params[:id]
-    ban
+    BlackList::BannedHelper.call(current_user, resource, params)
   end
 end

@@ -7,7 +7,7 @@ RSpec.describe 'GetProfileFriendCollection', type: :request do
 
   let!(:friend_user) { create(:user, first_name: 'Jeffrey', last_name: 'Lebowski', id: 1) }
 
-  let(:friend)      { create(:relation, relating_id: user.id, related_id: friend_user.id, state: 1) }
+  let(:friend)       { create(:relation, relating_id: user.id, related_id: friend_user.id, state: 1) }
 
   let(:value) { user.auth_token.value }
 

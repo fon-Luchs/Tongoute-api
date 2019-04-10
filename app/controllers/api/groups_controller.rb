@@ -4,9 +4,7 @@ class Api::GroupsController < BaseController
   private
 
   def build_resource
-    @group = Group.new(resource_params.merge(creator_id: current_user.id))
-    @group.users << current_user
-    @group
+    @group = builder.build
   end
 
   def resource
@@ -14,10 +12,18 @@ class Api::GroupsController < BaseController
   end
 
   def collection
-    @group = current_user.groups
+    @groups = current_user.groups
+  end
+
+  def build_params
+    resource_params.merge(creator_id: current_user.id)
   end
 
   def resource_params
     params.require(:group).permit(:name, :info)
+  end
+
+  def builder
+    Tools::ThroughJoinBuilder.new(klass: Group, c_user: current_user, params: build_params)
   end
 end

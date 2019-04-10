@@ -4,7 +4,7 @@ RSpec.describe 'BlockUserFriend', type: :request do
   let(:user) { create(:user, :with_auth_token, id: 2) }
 
   let(:b_user) { create(:user, :with_wall, id: 1) }
-  
+
   let(:value) { user.auth_token.value }
 
   let(:headers) { { 'Authorization' => "Token token=#{value}", 'Content-type' => 'application/json', 'Accept' => 'application/json' } }

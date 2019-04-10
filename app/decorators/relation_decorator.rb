@@ -22,8 +22,8 @@ class RelationDecorator < Draper::Decorator
           videos: initiated.videos.count,
           photos: initiated.photos.count,
           audios: initiated.audios.count
+
         }
-        
       }
 
     elsif context[:block_index]
